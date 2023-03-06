@@ -155,7 +155,7 @@
                 </div>
 
 
-                @component('CheckOut.resumo', ['carrinho' => $carrinho, 'endereco' => $endereco])@endcomponent
+                @component('CheckOut.resumo', ['carrinho' => $carrinho, 'endereco' => $endereco, 'cep' => $cep])@endcomponent
 
             </div>
         </div>

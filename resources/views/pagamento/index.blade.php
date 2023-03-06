@@ -3,35 +3,8 @@
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-    <script type="text/javascript"
-        src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js"></script>
 
-
-    <script type="text/javascript">
-        function abrir() {
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'https://ws.sandbox.pagseguro.uol.com.br/v2/sessions', true, {
-                headers: {                    
-                "Access-Control-Allow-Origin": "*",                   
-                "Access-Control-Allow-Methods": "GET,POST,OPTIONS,DELETE,PUT"
-            },
-            });
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.onreadystatechange = function() {
-                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                    var session = this.responseText;
-
-                    // Abre o lightbox do PagSeguro com os dados da transação
-                    PagSeguroLightbox({
-                        code: session,
-                    });
-                }
-            };
-            xhr.send('email=guilhermeieski@gmail.com&token=3EADF66FE76B407894FC414D33893228');
-        }
-        // Cria uma sessão no PagSeguro
-    </script>
-
+@endsection
 
 
 @section('body')
@@ -55,8 +28,59 @@
     <div class="bg0 p-t-75 p-b-85">
         <div class="container">
             <div class="row">
-                <button onclick="abrir()" type="button">Pagar</button>
+                <?php 
+                include_once("../PagSeguroLibrary/PagSeguroLibrary.php");
+            
+                if (PagSeguroConfig::getEnvironment() == "sandbox") : ?>
+                    <!--Para integração em ambiente de testes no Sandbox use este link-->
+                    <script type="text/javascript" src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js">
+                    </script>
+                <?php else : ?>
+                    <!--Para integração em ambiente de produção use este link-->
+                    <script type="text/javascript" src="https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js"></script>
+                <?php endif; ?>
+            
+                    <form method="GET">
+                        @csrf
+                        <input type="submit" name="pagar" value="Pagar"/>
+                    </form>
+            
+                    <?php
 
+                    if(isset($_GET['pagar'])){
+                        //https://m.pagseguro.uol.com.br/v3/guia-de-integracao/tutorial-da-biblioteca-pagseguro-em-php.html?_rnt=dd#configuracao
+                        //https://sandbox.pagseguro.uol.com.br/
+            
+                        $paymentRequest = new PagSeguroPaymentRequest();  
+                        $paymentRequest->addItem('0001', 'Notebook', 1, 1.00);  
+                        $paymentRequest->addItem('0002', 'Mochila',  1, 1.99);  
+            
+                        $paymentRequest->setCurrency("BRL");  
+            
+                        // Referenciando a transação do PagSeguro em seu sistema  
+                        $paymentRequest->setReference("REF123");  
+                        
+                        // URL para onde o comprador será redirecionado (GET) após o fluxo de pagamento  
+                        $paymentRequest->setRedirectUrl("http://www.lojamodelo.com.br");  
+                        
+                        // URL para onde serão enviadas notificações (POST) indicando alterações no status da transação  
+                        $paymentRequest->addParameter('notificationURL', 'https://tutoriaiseinformatica.com/sdkpagseguro/response.php');  
+            
+                        $paymentRequest->addParameter('senderBornDate', '07/05/1981');  
+            
+                        try {  
+                            $onlyCheckoutCode = true;
+                            $credentials = PagSeguroConfig::getAccountCredentials(); // getApplicationCredentials()  
+                            $checkoutUrl = $paymentRequest->register($credentials, $onlyCheckoutCode);  
+                            
+                            echo  "<script>PagSeguroLightbox('" . $checkoutUrl . "');</script>";
+            
+                        } catch (PagSeguroServiceException $e) {  
+                            die($e->getMessage());  
+                        } 
+                    }
+            ?>
+            
 
                 {{-- <form>
                    @csrf

@@ -1,89 +1,91 @@
-<!-- breadcrumb -->
+
+
 @extends('components.body')
 @section('body')
-    @component('components.topWhite', ['carrinho' => $carrinho])
-    @endcomponent
-    <div class="container">
-        <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-            <a href="{{ route('index') }}" class="stext-109 cl8 hov-cl1 trans-04">
-                Home
-                <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-            </a>
+    <!-- Product -->
+@component('components.topWhite', ['carrinho' => $carrinho])@endcomponent
+    <div class="bg0 m-t-23 p-b-140">
+        <div class="container">
+            <div class="flex-w flex-sb-m p-b-52">
+                <div class="flex-w flex-l-m filter-tope-group m-tb-10">
+                    <h4 class="mtext-109 cl2 p-b-30">
+                        Minhas compras
+                    </h4>
 
-            <span class="stext-109 cl4">
-                checkout
-            </span>
-        </div>
-    </div>
+                </div>
 
 
-    <!-- Shoping Cart -->
-    <div class="bg0 p-t-75 p-b-85">
-        <div class="col-lg-10 col-xl-10 m-lr-auto m-b-50">
-
-            <div >
-                <div class="container">
-                    <div class="row" style="margin-left: 3%;">
-                        <h4 class="mtext-109 cl2 p-b-30">
-                            Minhas compras
-                        </h4>
+                <div class="flex-w flex-c-m m-tb-10">
+                    <div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
+                        <i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
+                        <i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
+                        Procurar
                     </div>
                 </div>
-                <div class="d-flex" style="height: 45px">
-                    <div class="wid-full respon6-next">
-                        <div class="rs1-select2 bor8 bg0">
-                            <div class="d-flex" style="height: 45px">
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">First</th>
-                                        <th scope="col">Last</th>
-                                        <th scope="col">Handle</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($listaPedido as $pedido)
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                    </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
+
+                <!-- Search product -->
+
+                <div class="dis-none panel-search w-full p-t-10 p-b-15">
+                    <div class="bor8 dis-flex p-l-15">
+                        <button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+                            <i class="zmdi zmdi-search"></i>
+                        </button>
+                        <form method="Get" action="{{route('compra_historico')}}">
+                        <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search" placeholder="Search">
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row d-flex">
+                @foreach ($listaPedido as $item)
+                <div class="col-sm-12 col-md-12 col-lg-12 p-b-35 isotope-item women">
+                    <!-- Block2 -->
+                    <div class="block2">
+                        <div class="card">
+                            <div class="card-header">
+                                {{$item->dt_item}}
+                              </div>
+                            <div class="card-body">
+                                <div class="col-12 col-md-12 d-flex">
+                                    <div class="col-5">
+                                        <div class="d-flex ml-4">
+                                        <img src="{{$item->foto}}" style="max-width: 15%;" alt="..." class="img-thumbnail">
+                                        <div class="d-grid ml-3">
+                                            <p class="stext-107"><b class="black">{{$item->nome}}</b> </p>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <p class="stext-107">
+                                            Quantidade: {{$item->quantidade}}
+                                        </p>
+                                        
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="stext-107">
+                                          Status:  {{$item->status}}
+                                        </p>
+                                        
+                                    </div>
+                                    <div class="col-2">
+                                        <a class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" style="height: 30px" href="{{route('details',  ['id' => $item->id])}}">Ver Produto</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+             
+                @endforeach
+                    
+                  
+
+
             </div>
+            @component('vendor.pagination.simple-default', ['paginator' => $listaPedido])@endcomponent
+
         </div>
-
     </div>
-@endsection
-@section('scriptjs')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-        function calculaFrete(){
-            $("#cep").blur(function (e) {
-                let cep = this.value
-                console.log('cep', cep)
-
-
-                fetch(`https://www.cepcerto.com/ws/json-frete/8836000/${cep}/500`)
-                    .then(response => {
-                        response.json()
-                            .then(data => showData(data))
-                        const showData = (result) => {
-                            for(const campo in result){
-                                console.log(campo)
-                            }
-                        }
-
-                    })
-            })
-        }
-
-    </script>
-@endsection
+    @endsection

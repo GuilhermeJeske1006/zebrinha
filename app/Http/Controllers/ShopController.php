@@ -19,19 +19,6 @@ use PagSeguro\Services\DirectPayment\DirectPaymentService;
 
 class ShopController extends Controller
 {
-    private $_configs;
-
-    public function __construct(){
-        $this->_configs = new Configure();
-        $this->_configs->setCharset('UTF-8');
-        $this->_configs->setAccountCredentials(env('PAGSEGURO_EMAIL'), env('PAGSEGURO_TOKEN'));
-        $this->_configs->setEnvironment(env('PAGSEGURO_AMBIENTE'));
-        $this->_configs->setLog(true, storage_path('logs/pagseguro_' . date('Ymd') . '.log'));
-    }
-
-    public function getCredential(){
-        return $this->_configs->getAccountCredentials();
-    }
 
     public function Index($idCategoria = 0){
         $data = [];
@@ -70,20 +57,25 @@ class ShopController extends Controller
         $user = Auth::user()->id;
         $endereco = DB::select(
             'select * from enderecos where usuario_id = '.$user);
+        
+        $cep = Endereco::findOrFail($user);
 
         $carrinho = \Cart::getContent();
 
         return view('CheckOut.index', [
             'carrinho' => $carrinho,
-            'endereco' => $endereco
+            'endereco' => $endereco,
+            'cep'      => $cep
         ]);
     }
 
     public function Details($id){
         $produto = Produto::findOrFail($id);
 
-        $comentarios = DB::select(
-            'select * from comentarios where produto_id =' .$id);
+        $comentarios = DB::table('comentarios as P')
+                        ->join('users as C', 'C.id', '=', 'P.usuario_id')
+                        ->where('P.produto_id', '=', $id)
+                        ->get();
 
         $tamanhos = DB::select(
             'select * from Tamanhos where produto_id =' .$id);
@@ -167,13 +159,28 @@ class ShopController extends Controller
         $carrinho = \Cart::getContent();
 
         $idUsuario = Auth::user()->id;
-        $idpedido = 1;
-        $listaPedido = Pedido::where('usuario_id',$idUsuario )
-                                ->orderBy('datapedido', 'desc')
-                                ->get();
+
+        $search = \request('search');
+
+        if($search){
+
+            $listaPedido = DB::table('itens_pedidos as I')
+                        ->join('pedidos as P', 'P.id', '=', 'I.pedido_id')
+                        ->join('produtos as R', 'R.id', '=', 'I.produto_id')
+                        ->where('P.usuario_id', '=', $idUsuario)
+                        ->where('R.nome', 'like', '%'.$search.'%')
+                        ->simplePaginate(10);
+        }
+        else {
+
+            $listaPedido = DB::table('itens_pedidos as I')
+                        ->join('pedidos as P', 'P.id', '=', 'I.pedido_id')
+                        ->join('produtos as R', 'R.id', '=', 'I.produto_id')
+                        ->where('P.usuario_id', '=', $idUsuario)
+                        ->simplePaginate(10);
+        }
 
         return view('profile.historico',[
-            //'listaItens' => $listaItens,
             'carrinho' => $carrinho,
             'listaPedido' => $listaPedido,
         ]);
@@ -185,12 +192,6 @@ class ShopController extends Controller
         $user = Auth::user()->id;
         $endereco = DB::select(
             'select * from enderecos where usuario_id = '.$user);
-
-        // $sessionCode = \PagSeguro\Services\Session::create(
-        //     $this->getCredential()
-        // );
-        // $IdSession = $sessionCode->getResult();
-        // $data['sessionId'] = $IdSession;
 
         $data["carrinho"] = $itens;
         $data["endereco"] = $endereco;

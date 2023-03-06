@@ -18,7 +18,7 @@
                 </a>
 
                 <span class="stext-105 cl3">
-					<b>R${{$prod->valor}}</b> ou 6x de R$17,64
+					<b>R${{$prod->valor}}</b>
 				</span>
             </div>
         </div>
@@ -27,11 +27,3 @@
 
 @endforeach
 
-
-<script>
-    $(function() {
-        $("#btn-edit").click(function() {
-            $("#modal-editar").modal();
-        });
-    });
-</script>
