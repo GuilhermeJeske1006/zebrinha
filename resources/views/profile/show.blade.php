@@ -1,6 +1,6 @@
 <x-app-layout>
         @extends('components.body')
-        {{-- @component('components.topWhite', ['carrinho' => $carrinho])@endcomponent --}}
+        @component('components.topWhite', ['carrinho' => $carrinho])@endcomponent
 
     <div>
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">

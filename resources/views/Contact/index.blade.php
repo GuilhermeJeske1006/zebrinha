@@ -13,18 +13,19 @@
     <div class="container">
         <div class="flex-w flex-tr">
             <div class="size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
-                <form>
+                <form action="{{ route('enviar_email') }}" method="POST">
+                    @csrf
                     <h4 class="mtext-105 cl2 txt-center p-b-30">
                         Entre em contato
                     </h4>
 
                     <div class="bor8 m-b-20 how-pos4-parent">
-                        <input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" name="email" placeholder="Informe o seu email">
+                        <input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="email" name="email" id="email" placeholder="Informe o seu email">
                         <img class="how-pos4 pointer-none" src="images/icons/icon-email.png" alt="ICON">
                     </div>
 
                     <div class="bor8 m-b-30">
-                        <textarea class="stext-111 cl2 plh3 size-120 p-lr-28 p-tb-25" name="msg" placeholder="Como posso ajudar?"></textarea>
+                        <textarea class="stext-111 cl2 plh3 size-120 p-lr-28 p-tb-25" name="mensagem" id="mensagem" placeholder="Como posso ajudar?"></textarea>
                     </div>
 
                     <button type="submit" class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer">
@@ -45,7 +46,7 @@
 							</span>
 
                         <p class="stext-115 cl6 size-213 p-t-18">
-                            Rua são Pedro, 111, São pedro, Brusque, 88360-000
+                            Rua Mazico Ransdorf, 41 Fundos, Centro, Ilhota, 88320-000
                         </p>
                     </div>
                 </div>
@@ -61,7 +62,7 @@
 							</span>
 
                         <p class="stext-115 cl1 size-213 p-t-18">
-                            +55 (99) 99999-9999
+                            +55 (47) 99694-2420
                         </p>
                     </div>
                 </div>
@@ -77,7 +78,9 @@
 							</span>
 
                         <p class="stext-115 cl1 size-213 p-t-18">
-                            contact@example.com
+                            <a class="cl1" href="mailto:zebrinhakidsmodainfantil@gmail.com">
+                                zebrinhakidsmodainfantil@gmail.com
+                            </a>
                         </p>
                     </div>
                 </div>

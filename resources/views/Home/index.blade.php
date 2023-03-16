@@ -86,8 +86,9 @@
         </div>
 
         <div class="flex-w flex-sb-m p-b-52">
-            <div class="flex-w flex-l-m filter-tope-group m-tb-10">
-                <a class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
+            <div class="flex-w flex-l-m filter-tope-group ml-2">
+                <p style="font-size: 16px;" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5">Veja abaixo alguns de nossos produtos</p>
+                {{-- <a class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
                     Todos
                 </a>
                 <a class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"  data-filter=".women">
@@ -100,7 +101,7 @@
 
                 <a class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".bag">
                     Outros
-                </a>
+                </a> --}}
             </div>
 
         </div>

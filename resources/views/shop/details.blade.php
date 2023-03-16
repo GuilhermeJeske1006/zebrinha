@@ -1,75 +1,6 @@
 <!-- breadcrumb -->
 @extends('components.body')
-@section('scriptjs')
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-<script>
-function calculaFrete(){
-    const apiKey = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImM4MzdjNDg5MmZlYWJkMTU2NjhhZjVkNDg4YjI0MzdlMmE1ZWM2YmUzYzYwNGIzYTk5ZjUxNTMxMDJjOGRlZTg4NjhmZTMyNWQ5Y2Q5ODNjIn0.eyJhdWQiOiIxIiwianRpIjoiYzgzN2M0ODkyZmVhYmQxNTY2OGFmNWQ0ODhiMjQzN2UyYTVlYzZiZTNjNjA0YjNhOTlmNTE1MzEwMmM4ZGVlODg2OGZlMzI1ZDljZDk4M2MiLCJpYXQiOjE2Nzc1OTIxMjIsIm5iZiI6MTY3NzU5MjEyMiwiZXhwIjoxNzA5MTI4MTIyLCJzdWIiOiJiMjY4OTg0Yy0yZTUzLTRiZDEtYWE2MC1mNWU0ODczZjUwODUiLCJzY29wZXMiOlsiY2FydC1yZWFkIiwiY2FydC13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiY29tcGFuaWVzLXdyaXRlIiwiY291cG9ucy1yZWFkIiwiY291cG9ucy13cml0ZSIsIm5vdGlmaWNhdGlvbnMtcmVhZCIsIm9yZGVycy1yZWFkIiwicHJvZHVjdHMtcmVhZCIsInByb2R1Y3RzLWRlc3Ryb3kiLCJwcm9kdWN0cy13cml0ZSIsInB1cmNoYXNlcy1yZWFkIiwic2hpcHBpbmctY2FsY3VsYXRlIiwic2hpcHBpbmctY2FuY2VsIiwic2hpcHBpbmctY2hlY2tvdXQiLCJzaGlwcGluZy1jb21wYW5pZXMiLCJzaGlwcGluZy1nZW5lcmF0ZSIsInNoaXBwaW5nLXByZXZpZXciLCJzaGlwcGluZy1wcmludCIsInNoaXBwaW5nLXNoYXJlIiwic2hpcHBpbmctdHJhY2tpbmciLCJlY29tbWVyY2Utc2hpcHBpbmciLCJ0cmFuc2FjdGlvbnMtcmVhZCIsInVzZXJzLXJlYWQiLCJ1c2Vycy13cml0ZSIsIndlYmhvb2tzLXJlYWQiLCJ3ZWJob29rcy13cml0ZSIsInRkZWFsZXItd2ViaG9vayJdfQ.ZpXNoQJlNevstIsKb_kk0b-u8yOPaasi5mt-4nyU3Sbl6dQ8UdQxq8QJEtfSgvzywHUD6zEuCD0I5zGaYwv2-ZMXnaT9-mk1LYnQpbFUQTOnHmc8UbDs3w84IFrr-PUDOL6rxLrcwzZXj0ZF2WIfvSIx_gN62ToYgqusH0rfMz84LX_VsuWJ0oWLoqIq5eHrZueMvWyynu5tByJw0PgTBFgo4vmrUUzIqJ3_kOTcDQrGah3YpzF3SWF8ZG65mcygww5IJEy6zGcPA8IeELKLxsl6NVWG1AZbSE3BXhiJ-4PH3TGFTbbHlxLM1te5TJEhAlUZ0KnzswHn037ZH1wZRj2rNKr4-QLOHmq6HW1Tf44Fu9hBqE7ea5Y1bwEcrjxwN79Stv1bybZXZ8rImYTNcW-Oep4nEvFz5KPOHdWxdnOPsTfvb4J71jyuWzeKbcLOk0o3wOzfJpC9LuRZWHVNSgBmrJFtNVhNLmVnBveGa43m_7cDAn6NedZicvV5u_t-xyo_h69pZCY2OuyF4Y0xhogY7Bw5yUA-qqvW1-gh88aV_abjesWHN3QwdBoiFCgsfCG4sbVxKFcHuqiUX3VsoK1zcWFwB2FCdj2aBJRKIHrjvjDoGYWMyopDykmG-S6q-Hr9hk3L0uKnQqSywfLWN5m6cdzrLBbvXzJAfwMgn-Q';
 
-axios.get('https://melhorenvio.com.br/api/v2/me/shipment/calculate', {
-  headers: {
-    Authorization: `Bearer ${apiKey}`
-  },
-  params: {
-    from: {
-        postal_code: "88360000"
-    },
-    to: {
-        postal_code: $(".cep").val(),
-    },
-    products: {
-            width: 11,
-            height: 17,
-            length: 11,
-            weight: 0.3,
-            quantity: 1
-    }
-  }
-})
-.then(response => {
-  console.log(response.data)
-        var b = document.createElement('b');
-        b.innerHTML = "<b>Valor do Frete : </b>"
-        document.getElementById('container').appendChild(b);
-  for(let i =0; i < response.data.length; i++ ){
-    if(response.data[i].error != "Serviço econômico indisponível para o trecho." && response.data[i].price != undefined){
-        var button = document.createElement('li');
-        button.innerHTML = response.data[i].name + " = " + " R$ " + response.data[i].price
-        document.getElementById('container').appendChild(button);
-    }
-    
-  }
-    
-})
-.catch(error => {
-  console.log(error);
-});
-}
-
-function valid() {
-        var comboNome = document.getElementById("tamanho");
-        if (comboNome.options[comboNome.selectedIndex].value == "" ){
-                alert("Por favor, Selecione um tamanho antes de prosseguir!");
-                return false
-        }
-        else{
-            document.getElementById("addcart").style.display = "none";
-            var html = `
-            <button style="text-align: center;
-                            font-size: 14px;"  type="submit"  class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
-                                Adicionar ao carrinho
-                        </button>
-            `
-            let div = document.createElement('button');
-            div.innerHTML = html;
-             document.getElementById('divAdd').appendChild(div);
-        }
-
-    }   
-</script>
-
-@endsection
 @section('body')
     @component('components.topWhite', ['carrinho' => $carrinho])@endcomponent
 <div class="container">
@@ -154,10 +85,10 @@ function valid() {
 
                             <div class="size-204 respon6-next">
                                 <div class="rs1-select2 bor8 bg0">
-                                    <select class="js-select2" id="tamanho">
-                                        <option value="">Selecione o tamanho</option>
+                                    <select onclick="verifica()" class="js-select2" id="tamanho">
+                                        <option  value="">Selecione o tamanho</option>
                                         @foreach($tamanhos as $item)
-                                        <option value="{{$item->tamanho}}">{{$item->tamanho}}</option>
+                                        <option  value="{{$item->tamanho}}">{{$item->tamanho}}</option>
                                         @endforeach
 
                                     </select>
@@ -165,24 +96,9 @@ function valid() {
                                 </div>
                             </div>
 
-                          
-                              
+
+
                         </div>
-
-{{--                        <div class="flex-w flex-r-m p-b-10">--}}
-{{--                            <div class="size-203 flex-c-m respon6">--}}
-{{--                                Cor--}}
-{{--                            </div>--}}
-
-{{--                            <div class="size-204 respon6-next">--}}
-{{--                                <div class="rs1-select2 bor8 bg0">--}}
-{{--                                    <select class="js-select2" name="time">--}}
-{{--                                        <option>Selecione a cor</option>--}}
-{{--                                        <option>Azul</option>--}}
-{{--                                    </select>--}}
-{{--                                    <div class="dropDownSelect2"></div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
                         </div>
 
                         <div class="flex-w flex-r-m p-b-10">
@@ -206,7 +122,7 @@ function valid() {
                                     Adicionar ao carrinho
                             </a>
                             </div>
-                            
+
                         </div>
                         <br>
 
@@ -231,7 +147,7 @@ function valid() {
 
                         </div>
                         <div class="flex-w flex-r-m p-b-10" style="margin-bottom: 3%; display: block;">
-                            <div class=" flex-c-m respon6" id="card" style="flex-direction: column;">
+                            <div class=" flex-c-m respon6 displayFrete" id="card" style="flex-direction: column;">
                                 <div  id="container">
 
                             </div>
@@ -378,9 +294,9 @@ function valid() {
                             <div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto">
                                 <div class="p-b-30 m-lr-15-sm">
                                     <!-- Review -->
-                                    
+
                                     @foreach($comentarios as $coment)
-                                   
+
                                     <div class="flex-w flex-t p-b-68">
                                         <div class="wrap-pic-s size-109 bor0 of-hidden m-r-18 m-t-6">
                                             <img src="{{asset('images/cabeca_perfil.png')}}" alt="AVATAR">
@@ -496,8 +412,109 @@ function valid() {
         </div>
     </div>
 
-    
+
 </section>
+
+    <style>
+        @media only screen and (max-width: 600px) {
+            .displayFrete {
+                display: contents;
+            }
+        }
+    </style>
+
+    @section('scriptjs')
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+        <script defer>
+            function calculaFrete(){
+                const apiKey = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImM4MzdjNDg5MmZlYWJkMTU2NjhhZjVkNDg4YjI0MzdlMmE1ZWM2YmUzYzYwNGIzYTk5ZjUxNTMxMDJjOGRlZTg4NjhmZTMyNWQ5Y2Q5ODNjIn0.eyJhdWQiOiIxIiwianRpIjoiYzgzN2M0ODkyZmVhYmQxNTY2OGFmNWQ0ODhiMjQzN2UyYTVlYzZiZTNjNjA0YjNhOTlmNTE1MzEwMmM4ZGVlODg2OGZlMzI1ZDljZDk4M2MiLCJpYXQiOjE2Nzc1OTIxMjIsIm5iZiI6MTY3NzU5MjEyMiwiZXhwIjoxNzA5MTI4MTIyLCJzdWIiOiJiMjY4OTg0Yy0yZTUzLTRiZDEtYWE2MC1mNWU0ODczZjUwODUiLCJzY29wZXMiOlsiY2FydC1yZWFkIiwiY2FydC13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiY29tcGFuaWVzLXdyaXRlIiwiY291cG9ucy1yZWFkIiwiY291cG9ucy13cml0ZSIsIm5vdGlmaWNhdGlvbnMtcmVhZCIsIm9yZGVycy1yZWFkIiwicHJvZHVjdHMtcmVhZCIsInByb2R1Y3RzLWRlc3Ryb3kiLCJwcm9kdWN0cy13cml0ZSIsInB1cmNoYXNlcy1yZWFkIiwic2hpcHBpbmctY2FsY3VsYXRlIiwic2hpcHBpbmctY2FuY2VsIiwic2hpcHBpbmctY2hlY2tvdXQiLCJzaGlwcGluZy1jb21wYW5pZXMiLCJzaGlwcGluZy1nZW5lcmF0ZSIsInNoaXBwaW5nLXByZXZpZXciLCJzaGlwcGluZy1wcmludCIsInNoaXBwaW5nLXNoYXJlIiwic2hpcHBpbmctdHJhY2tpbmciLCJlY29tbWVyY2Utc2hpcHBpbmciLCJ0cmFuc2FjdGlvbnMtcmVhZCIsInVzZXJzLXJlYWQiLCJ1c2Vycy13cml0ZSIsIndlYmhvb2tzLXJlYWQiLCJ3ZWJob29rcy13cml0ZSIsInRkZWFsZXItd2ViaG9vayJdfQ.ZpXNoQJlNevstIsKb_kk0b-u8yOPaasi5mt-4nyU3Sbl6dQ8UdQxq8QJEtfSgvzywHUD6zEuCD0I5zGaYwv2-ZMXnaT9-mk1LYnQpbFUQTOnHmc8UbDs3w84IFrr-PUDOL6rxLrcwzZXj0ZF2WIfvSIx_gN62ToYgqusH0rfMz84LX_VsuWJ0oWLoqIq5eHrZueMvWyynu5tByJw0PgTBFgo4vmrUUzIqJ3_kOTcDQrGah3YpzF3SWF8ZG65mcygww5IJEy6zGcPA8IeELKLxsl6NVWG1AZbSE3BXhiJ-4PH3TGFTbbHlxLM1te5TJEhAlUZ0KnzswHn037ZH1wZRj2rNKr4-QLOHmq6HW1Tf44Fu9hBqE7ea5Y1bwEcrjxwN79Stv1bybZXZ8rImYTNcW-Oep4nEvFz5KPOHdWxdnOPsTfvb4J71jyuWzeKbcLOk0o3wOzfJpC9LuRZWHVNSgBmrJFtNVhNLmVnBveGa43m_7cDAn6NedZicvV5u_t-xyo_h69pZCY2OuyF4Y0xhogY7Bw5yUA-qqvW1-gh88aV_abjesWHN3QwdBoiFCgsfCG4sbVxKFcHuqiUX3VsoK1zcWFwB2FCdj2aBJRKIHrjvjDoGYWMyopDykmG-S6q-Hr9hk3L0uKnQqSywfLWN5m6cdzrLBbvXzJAfwMgn-Q';
+
+                axios.get('https://melhorenvio.com.br/api/v2/me/shipment/calculate', {
+                    headers: {
+                        Authorization: `Bearer ${apiKey}`
+                    },
+                    params: {
+                        from: {
+                            postal_code: "88320-000"
+                        },
+                        to: {
+                            postal_code: $(".cep").val(),
+                        },
+                        products: {
+                            width: 11,
+                            height: 17,
+                            length: 11,
+                            weight: 0.3,
+                            quantity: 1
+                        }
+                    }
+                })
+                    .then(response => {
+                        console.log(response.data)
+                        var b = document.createElement('b');
+                        b.innerHTML = "<b>Valor do Frete : </b>"
+                        document.getElementById('container').appendChild(b);
+                        for(let i =0; i < response.data.length; i++ ){
+                            if(response.data[i].error != "Serviço econômico indisponível para o trecho." && response.data[i].price != undefined){
+                                var button = document.createElement('li');
+                                button.innerHTML = response.data[i].name + " = " + " R$ " + response.data[i].price
+                                document.getElementById('container').appendChild(button);
+                            }
+
+                        }
+
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
+
+
+
+            function valid() {
+                var comboNome = document.getElementById("tamanho");
+                if (comboNome.options[comboNome.selectedIndex].value == "" ){
+                    alert("Por favor, Selecione um tamanho antes de prosseguir!");
+                    return false
+                }
+                else{
+                    document.getElementById("addcart").style.display = "none";
+                    var html = `
+            <button style="text-align: center;
+                            font-size: 14px;"  type="submit"  class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                Adicionar ao carrinho
+                        </button>
+            `
+                    let div = document.createElement('button');
+                    div.innerHTML = html;
+                    document.getElementById('divAdd').appendChild(div);
+                }
+
+            }
+        </script>
+        <script>
+            $(document).ready(() => {
+                // seleciona o elemento select
+                const mySelect = $("#tamanho");
+
+                // adiciona um listener para o evento "change" do elemento select
+                mySelect.change(() => {
+                    document.getElementById("addcart").style.display = "none";
+                    var html = `
+            <button style="text-align: center;
+                            font-size: 14px;"  type="submit"  class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                Adicionar ao carrinho
+                        </button>
+            `
+                    let div = document.createElement('button');
+                    div.innerHTML = html;
+                    document.getElementById('divAdd').appendChild(div);
+                });
+            });
+        </script>
+
+    @endsection
 @endsection
 
 

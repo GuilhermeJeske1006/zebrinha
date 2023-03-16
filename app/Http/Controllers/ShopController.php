@@ -20,45 +20,53 @@ use PagSeguro\Services\DirectPayment\DirectPaymentService;
 class ShopController extends Controller
 {
 
-    public function Index($idCategoria = 0){
-        $data = [];
+    public function index(Request $request, $idCategoria = 0)
+    {
+        $search = $request->input('search');
+        $precoMinimo = $request->input('preco_minimo');
+        $precoMaximo = $request->input('preco_maximo');
+        $itens = Produto::query();
 
-        $search = \request('search');
+        if ($precoMinimo !== null) {
+            $itens->where('valor', '>=', $precoMinimo);
+        }
+
+        if ($precoMaximo !== null) {
+            $itens->where('valor', '<=', $precoMaximo);
+        }
+
+        if ($idCategoria !== 0) {
+            $itens->where('categoria_id', $idCategoria);
+        }
+
+        if ($search !== null) {
+            $itens->where('nome', 'like', '%' . $search . '%');
+        }
+
+        $listaProdutos = $itens->simplePaginate(16);
         $listaCategorias = Categoria::all();
-
-        if($search){
-            $queryProduto = Produto::where([
-                ['nome', 'like', '%'.$search.'%']
-            ])->simplePaginate(16);
-        }
-        else if($idCategoria != 0){
-            $queryProduto = Produto::where("categoria_id", $idCategoria)->simplePaginate(16);
-        }
-        else{
-            $queryProduto = Produto::simplePaginate(16);
-        }
-        $listaProdutos = $queryProduto;
-
         $carrinho = \Cart::getContent();
 
-        $data["lista"] = $listaProdutos;
-        $data["listaCategoria"] = $listaCategorias;
-        $data["idcategoria"] = $idCategoria;
-        $data["carrinho"] = $carrinho;
-        $data["search"] = $search;
-
-
-        return view(
-            'shop.Index',
-            $data);
+        return view('shop.index', [
+            'lista' => $listaProdutos,
+            'listaCategoria' => $listaCategorias,
+            'idcategoria' => $idCategoria,
+            'carrinho' => $carrinho,
+            'search' => $search,
+        ]);
     }
 
     public function Check(){
         $user = Auth::user()->id;
         $endereco = DB::select(
             'select * from enderecos where usuario_id = '.$user);
-        
-        $cep = Endereco::findOrFail($user);
+
+        $cep = DB::table('enderecos')
+        ->where('usuario_id', $user)
+        ->first();
+
+
+
 
         $carrinho = \Cart::getContent();
 
@@ -148,11 +156,11 @@ class ShopController extends Controller
         $vendaService = new VendaService();
         $result = $vendaService->finalizarVenda($prods, Auth::user());
 
-        $request->session()->forget('cart');
+       \Cart::clear();
 
 
 
-        return redirect()->route('checkout');
+        return redirect()->route('index');
     }
 
     public function historico(Request $request){
@@ -198,8 +206,4 @@ class ShopController extends Controller
 
         return view('pagamento.index', $data);
     }
-
-
-
-
 }

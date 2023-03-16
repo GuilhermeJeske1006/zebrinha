@@ -5,6 +5,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AdressController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EmailController;
 
 
 
@@ -32,8 +33,9 @@ Route::get('/carrinho', [ShopController::class, 'carrinho'])->name('carrinho');
 Route::get('/detalhes/{id}', [ShopController::class, 'Details'])->name('details');
 Route::post('/comentar', [ShopController::class, 'Comentar'])->name('comentar');
 Route::match(['get', 'post'], '/excluircarrinho', [ShopController::class, 'excluirCarrinho'])->name('excluir_carrinho');
-Route::match(['get', 'post'],'/enviar/endereco', [AdressController::class, 'adicionarEndereco'])->name('adicionar_endereco');
 Route::get('/endereco', [AdressController::class, 'Endereco'])->name('endereco');
+Route::post('/enviar-email', [EmailController::class, 'enviar'])->name('enviar_email');
+
 
 
 Route::middleware([
@@ -47,7 +49,8 @@ Route::middleware([
     Route::get('/compras/historico', [ShopController::class, 'historico'])->name('compra_historico');
     Route::get('/checkout/pagamento', [ShopController::class, 'getPagamento'])->name('ir_ao_pagamento');
     Route::post('/finalizar/pedido', [ShopController::class, 'finalizarPedido'])->name('finalizar_pedido');
-
+    Route::put('/endereco/edit', [AdressController::class, 'edit'])->name('endereco.edit');
+    Route::match(['get', 'post'],'/enviar/endereco', [AdressController::class, 'adicionarEndereco'])->name('adicionar_endereco');
 
 
 });

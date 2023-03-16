@@ -1,121 +1,150 @@
 @section('scriptjs')
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-    <script>
-        //  const axios = require('axios');
+    <script defer>
+        $(document).ready(() => {
+            //  const axios = require('axios');
 
-        function somar(subtotal, valor) {
-            return parseFloat(subtotal) + parseFloat(valor);
-        }
-        
+            function somar(subtotal, valor) {
+                return parseFloat(subtotal) + parseFloat(valor);
+            }
+
+            console.log('teste')
+
+            // seleciona o elemento input
+            const myInput = $("#myInput");
+
+            // recupera o valor do input
+            var inputValue = myInput.val();
+            console.log(inputValue); // exibe o valor do input no console
 
 
-        const apiKey =
-            'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImM4MzdjNDg5MmZlYWJkMTU2NjhhZjVkNDg4YjI0MzdlMmE1ZWM2YmUzYzYwNGIzYTk5ZjUxNTMxMDJjOGRlZTg4NjhmZTMyNWQ5Y2Q5ODNjIn0.eyJhdWQiOiIxIiwianRpIjoiYzgzN2M0ODkyZmVhYmQxNTY2OGFmNWQ0ODhiMjQzN2UyYTVlYzZiZTNjNjA0YjNhOTlmNTE1MzEwMmM4ZGVlODg2OGZlMzI1ZDljZDk4M2MiLCJpYXQiOjE2Nzc1OTIxMjIsIm5iZiI6MTY3NzU5MjEyMiwiZXhwIjoxNzA5MTI4MTIyLCJzdWIiOiJiMjY4OTg0Yy0yZTUzLTRiZDEtYWE2MC1mNWU0ODczZjUwODUiLCJzY29wZXMiOlsiY2FydC1yZWFkIiwiY2FydC13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiY29tcGFuaWVzLXdyaXRlIiwiY291cG9ucy1yZWFkIiwiY291cG9ucy13cml0ZSIsIm5vdGlmaWNhdGlvbnMtcmVhZCIsIm9yZGVycy1yZWFkIiwicHJvZHVjdHMtcmVhZCIsInByb2R1Y3RzLWRlc3Ryb3kiLCJwcm9kdWN0cy13cml0ZSIsInB1cmNoYXNlcy1yZWFkIiwic2hpcHBpbmctY2FsY3VsYXRlIiwic2hpcHBpbmctY2FuY2VsIiwic2hpcHBpbmctY2hlY2tvdXQiLCJzaGlwcGluZy1jb21wYW5pZXMiLCJzaGlwcGluZy1nZW5lcmF0ZSIsInNoaXBwaW5nLXByZXZpZXciLCJzaGlwcGluZy1wcmludCIsInNoaXBwaW5nLXNoYXJlIiwic2hpcHBpbmctdHJhY2tpbmciLCJlY29tbWVyY2Utc2hpcHBpbmciLCJ0cmFuc2FjdGlvbnMtcmVhZCIsInVzZXJzLXJlYWQiLCJ1c2Vycy13cml0ZSIsIndlYmhvb2tzLXJlYWQiLCJ3ZWJob29rcy13cml0ZSIsInRkZWFsZXItd2ViaG9vayJdfQ.ZpXNoQJlNevstIsKb_kk0b-u8yOPaasi5mt-4nyU3Sbl6dQ8UdQxq8QJEtfSgvzywHUD6zEuCD0I5zGaYwv2-ZMXnaT9-mk1LYnQpbFUQTOnHmc8UbDs3w84IFrr-PUDOL6rxLrcwzZXj0ZF2WIfvSIx_gN62ToYgqusH0rfMz84LX_VsuWJ0oWLoqIq5eHrZueMvWyynu5tByJw0PgTBFgo4vmrUUzIqJ3_kOTcDQrGah3YpzF3SWF8ZG65mcygww5IJEy6zGcPA8IeELKLxsl6NVWG1AZbSE3BXhiJ-4PH3TGFTbbHlxLM1te5TJEhAlUZ0KnzswHn037ZH1wZRj2rNKr4-QLOHmq6HW1Tf44Fu9hBqE7ea5Y1bwEcrjxwN79Stv1bybZXZ8rImYTNcW-Oep4nEvFz5KPOHdWxdnOPsTfvb4J71jyuWzeKbcLOk0o3wOzfJpC9LuRZWHVNSgBmrJFtNVhNLmVnBveGa43m_7cDAn6NedZicvV5u_t-xyo_h69pZCY2OuyF4Y0xhogY7Bw5yUA-qqvW1-gh88aV_abjesWHN3QwdBoiFCgsfCG4sbVxKFcHuqiUX3VsoK1zcWFwB2FCdj2aBJRKIHrjvjDoGYWMyopDykmG-S6q-Hr9hk3L0uKnQqSywfLWN5m6cdzrLBbvXzJAfwMgn-Q';
 
-        axios.get('https://melhorenvio.com.br/api/v2/me/shipment/calculate', {
+            const apiKey =
+                'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImM4MzdjNDg5MmZlYWJkMTU2NjhhZjVkNDg4YjI0MzdlMmE1ZWM2YmUzYzYwNGIzYTk5ZjUxNTMxMDJjOGRlZTg4NjhmZTMyNWQ5Y2Q5ODNjIn0.eyJhdWQiOiIxIiwianRpIjoiYzgzN2M0ODkyZmVhYmQxNTY2OGFmNWQ0ODhiMjQzN2UyYTVlYzZiZTNjNjA0YjNhOTlmNTE1MzEwMmM4ZGVlODg2OGZlMzI1ZDljZDk4M2MiLCJpYXQiOjE2Nzc1OTIxMjIsIm5iZiI6MTY3NzU5MjEyMiwiZXhwIjoxNzA5MTI4MTIyLCJzdWIiOiJiMjY4OTg0Yy0yZTUzLTRiZDEtYWE2MC1mNWU0ODczZjUwODUiLCJzY29wZXMiOlsiY2FydC1yZWFkIiwiY2FydC13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiY29tcGFuaWVzLXdyaXRlIiwiY291cG9ucy1yZWFkIiwiY291cG9ucy13cml0ZSIsIm5vdGlmaWNhdGlvbnMtcmVhZCIsIm9yZGVycy1yZWFkIiwicHJvZHVjdHMtcmVhZCIsInByb2R1Y3RzLWRlc3Ryb3kiLCJwcm9kdWN0cy13cml0ZSIsInB1cmNoYXNlcy1yZWFkIiwic2hpcHBpbmctY2FsY3VsYXRlIiwic2hpcHBpbmctY2FuY2VsIiwic2hpcHBpbmctY2hlY2tvdXQiLCJzaGlwcGluZy1jb21wYW5pZXMiLCJzaGlwcGluZy1nZW5lcmF0ZSIsInNoaXBwaW5nLXByZXZpZXciLCJzaGlwcGluZy1wcmludCIsInNoaXBwaW5nLXNoYXJlIiwic2hpcHBpbmctdHJhY2tpbmciLCJlY29tbWVyY2Utc2hpcHBpbmciLCJ0cmFuc2FjdGlvbnMtcmVhZCIsInVzZXJzLXJlYWQiLCJ1c2Vycy13cml0ZSIsIndlYmhvb2tzLXJlYWQiLCJ3ZWJob29rcy13cml0ZSIsInRkZWFsZXItd2ViaG9vayJdfQ.ZpXNoQJlNevstIsKb_kk0b-u8yOPaasi5mt-4nyU3Sbl6dQ8UdQxq8QJEtfSgvzywHUD6zEuCD0I5zGaYwv2-ZMXnaT9-mk1LYnQpbFUQTOnHmc8UbDs3w84IFrr-PUDOL6rxLrcwzZXj0ZF2WIfvSIx_gN62ToYgqusH0rfMz84LX_VsuWJ0oWLoqIq5eHrZueMvWyynu5tByJw0PgTBFgo4vmrUUzIqJ3_kOTcDQrGah3YpzF3SWF8ZG65mcygww5IJEy6zGcPA8IeELKLxsl6NVWG1AZbSE3BXhiJ-4PH3TGFTbbHlxLM1te5TJEhAlUZ0KnzswHn037ZH1wZRj2rNKr4-QLOHmq6HW1Tf44Fu9hBqE7ea5Y1bwEcrjxwN79Stv1bybZXZ8rImYTNcW-Oep4nEvFz5KPOHdWxdnOPsTfvb4J71jyuWzeKbcLOk0o3wOzfJpC9LuRZWHVNSgBmrJFtNVhNLmVnBveGa43m_7cDAn6NedZicvV5u_t-xyo_h69pZCY2OuyF4Y0xhogY7Bw5yUA-qqvW1-gh88aV_abjesWHN3QwdBoiFCgsfCG4sbVxKFcHuqiUX3VsoK1zcWFwB2FCdj2aBJRKIHrjvjDoGYWMyopDykmG-S6q-Hr9hk3L0uKnQqSywfLWN5m6cdzrLBbvXzJAfwMgn-Q';
+
+            axios.get('https://melhorenvio.com.br/api/v2/me/shipment/calculate', {
                 headers: {
                     Authorization: `Bearer ${apiKey}`
                 },
                 params: {
                     from: {
-                        postal_code: "88360000"
+                        postal_code: "88320-000"
                     },
 
                     to: {
-                        postal_code: 88360000
+                        postal_code: inputValue
                     },
-                    products: [
-                            {
-                            width: 11,
-                            height: 17,
-                            length: 11,
-                            weight: 0.3,
-                            quantity: 1
-                        },
-                    ]
+                    products: [{
+                        width: 11,
+                        height: 17,
+                        length: 11,
+                        weight: 0.3,
+                        quantity: 1
+                    }, ]
                 }
             })
-            .then(response => {
-                console.log(response.data)
-                var b = document.createElement('b');
-                b.innerHTML = `<p class="mtext-101 cl2">Valores do Frete : </p>`
-                document.getElementById('container').appendChild(b);
-                for (let i = 0; i < response.data.length; i++) {
-                    if (response.data[i].error != "Serviço econômico indisponível para o trecho." && response.data[i]
-                        .price != undefined) {
-                        let html =
-                            `<div class="d-flex">
-         <input onclick="pegarId(${response.data[i].id}, ${response.data[i].price})" id="${response.data[i].id}" type="radio"/>
+                .then(response => {
+                    var b = document.createElement('b');
+                    b.innerHTML = `<p class="mtext-101 cl2">Valores do Frete : </p>`
+                    document.getElementById('container').appendChild(b);
+                    for (let i = 0; i < response.data.length; i++) {
+                        if (response.data[i].error != "Serviço econômico indisponível para o trecho." && response.data[i]
+                            .price != undefined) {
+                            let html =
+                                `<div class="d-flex">
+         <input onclick="pegarId(${response.data[i].id}, ${response.data[i].price})" id="${response.data[i].id}" type="checkbox"/>
          <li class="ml-2" id="${response.data[i].id}"> ${response.data[i].name + " = " + " R$ " + response.data[i].price}</li>
             </div>`
-                        let div = document.createElement('div');
-                        div.innerHTML = html;
-                        document.getElementById('container').appendChild(div);
+                            let div = document.createElement('div');
+                            div.innerHTML = html;
+                            document.getElementById('container').appendChild(div);
 
-                        response.data.filter((el) => {
-                            if(el.name == "SEDEX"){
-                                document.getElementById(el.id).checked = true;
-                            }
-                        })
+
+
+                        }
+                    }
+                    let valor = document.cookie.replace(/(?:(?:^|.*;\s*)fretevlr\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+                    let id = document.cookie.replace(/(?:(?:^|.*;\s*)freteId\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+
+                    if (valor != "") {
+                        document.getElementById("vlrdefault").style.display = "none";
+
+                        let p = document.createElement('p');
+                        p.innerHTML = `R$ ${valor}`
+                        document.getElementById('vlrfrete').appendChild(p);
+
+
+                        document.getElementById("vlrTotaldefault").style.display = "none";
+                        let subtotal = $("#subtotal").val()
+                        let soma = somar(subtotal, valor)
+                        let p2 = document.createElement('p');
+                        p2.innerHTML = `R$ ${soma}`
+                        document.getElementById('vlrTotal').appendChild(p2);
+
 
                     }
-                }
-                if (localStorage.getItem('preco') != null) {
-                    document.getElementById("vlrdefault").style.display = "none";
-                    var valor = localStorage.getItem('preco')
-                    var id = localStorage.getItem('id')
+                })
+                .catch(error => {
+                    console.error(error);
+                });
 
-                    let p = document.createElement('p');
-                    p.innerHTML = `R$ ${valor}`
-                    document.getElementById('vlrfrete').appendChild(p);
+            function pegarId(id, preco) {
+                const ultimoParagrafo = document.querySelector("p:last-child");
+                ultimoParagrafo.remove();
 
+                document.getElementById("vlrdefault").style.display = "none";
 
-                    document.getElementById("vlrTotaldefault").style.display = "none";
-                    let subtotal = $("#subtotal").val()
-                    let soma = somar(subtotal, valor)
-                    let p2 = document.createElement('p');
-                    p2.innerHTML = `R$ ${soma}`
-                    document.getElementById('vlrTotal').appendChild(p2);
+                // localStorage.setItem('preco', preco);
+                // localStorage.setItem('id', id);
 
-
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            });
+                // Define a variável que deseja armazenar nos cookies
+                let fretevlr = preco;
+                let freteId = id;
 
 
+                // Define a data de expiração do cookie (opcional)
+                let dataExpiracao = new Date();
+                dataExpiracao.setTime(dataExpiracao.getTime() + (10 * 60 * 1000)); // expira em 10 minutos
 
-
-
-        function pegarId(id, preco) {
-            document.getElementById("vlrdefault").style.display = "none";
-
-            localStorage.setItem('preco', preco);
-            localStorage.setItem('id', id);
-
-
-            var valor = localStorage.getItem('preco')
-            let p = document.createElement('p');
-            p.innerHTML = `R$ ${valor}`
-            document.getElementById('vlrfrete').appendChild(p);
-
-            let subtotal = $("#subtotal").val()
-            let soma = somar(subtotal, valor)
-            console.log(soma)
+                // Armazena a variável nos cookies
+                document.cookie = "fretevlr=" + fretevlr + "; expires=" + dataExpiracao.toUTCString() + "; path=/";
+                document.cookie = "freteId=" + freteId + "; expires=" + dataExpiracao.toUTCString() + "; path=/";
 
 
 
-        }
+                // var valor = localStorage.getItem('preco')
+                let p = document.createElement('p');
+                let valor = document.cookie.replace(/(?:(?:^|.*;\s*)fretevlr\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+
+                p.innerHTML = `R$ ${valor}`
+                document.getElementById('vlrfrete').appendChild(p);
+
+
+                let subtotal = $("#subtotal").val()
+                let soma = somar(subtotal, valor)
+                let p2 = document.createElement('p')
+                p2.classList.add("destaque");
+
+                p2.innerHTML = `R$ ${soma}`
+                document.getElementById('vlrTotal').appendChild(p2);
+
+            }
+        });
     </script>
-@endsection
 
+@endsection
 <div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
     <div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
         <h4 class="mtext-109 cl2 p-b-30">
             Resumo da compra
         </h4>
+        @if($cep != null)
+        <input type="hidden" id="myInput" value="{{$cep->cep}}">
+        @else
+            <input type="hidden" id="myInput" value="00000-000">
+
+        @endif
         @php $subtotal = 0; @endphp
         <ul class="header-cart-wrapitem w-full">
             @foreach ($carrinho as $indice => $cart)
@@ -136,7 +165,6 @@
                                 class="header-cart-item-name m-b-18 hov-cl1 trans-04">
                                 {{ $cart->name }}
                             </a>
-                            <input type="text" name="name" id="name" value="{{$cart->name }}">
                             <div class="d-flex">
                                 <span class="header-cart-item-info">
                                     {{ $cart->quantity }} x R${{ $cart->price }}
@@ -205,14 +233,14 @@
                 Ir para o pagamento
             </a>
         @elseif(count($carrinho) == 0)
-            <a  class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer js-addproduct"
+            <a class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer js-addproduct"
                 style="color: #fff">
                 Ir para o pagamento
             </a>
         @else
-            <?php 
+            <?php
         include_once("../PagSeguroLibrary/PagSeguroLibrary.php");
-    
+
         if (PagSeguroConfig::getEnvironment() == "sandbox") : ?>
             <!--Para integração em ambiente de testes no Sandbox use este link-->
             <script type="text/javascript"
@@ -223,7 +251,7 @@
             </script>
             <?php endif; ?>
 
-            <form method="GET">
+            <form  method="GET">
                 <button type="submit" name="pagar"
                     class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
 
@@ -231,19 +259,20 @@
                 </button>
             </form>
 
+
             <?php
-            
+
             if (isset($_GET['pagar'])) {
                 //https://m.pagseguro.uol.com.br/v3/guia-de-integracao/tutorial-da-biblioteca-pagseguro-em-php.html?_rnt=dd#configuracao
                 //https://sandbox.pagseguro.uol.com.br/
-            
+
                 $paymentRequest = new PagSeguroPaymentRequest();
                 foreach ($carrinho as $e) {
                     $paymentRequest->addItem($e->id, $e->name, intval($e->quantity), floatval($e->price));
                 }
-                
-            
-                $paymentRequest->addItem('0000', 'Frete', 1, 10.61);
+
+                $vlrFrete = $_COOKIE['fretevlr'];
+                $paymentRequest->addItem('0000', 'Frete', 1, floatval($vlrFrete));
                 $sedexCode = PagSeguroShippingType::getCodeByType('SEDEX');
                 $paymentRequest->setShippingType($sedexCode);
                 foreach ($endereco as $e) {
@@ -251,39 +280,41 @@
                 }
                 $nome = Auth::user()->name;
                 $email = Auth::user()->email;
-                $paymentRequest->setSender(
-                    $nome,
-                    $email,
-                    );
-                
-                // $paymentRequest->setSender($nome , $email, '47', '992801006');
+                $paymentRequest->setSender($nome, $email);
 
-            
+                $paymentRequest->setSender($nome , $email, '47', '992801006');
+
                 $paymentRequest->setCurrency('BRL');
-            
+
                 // Referenciando a transação do PagSeguro em seu sistema
                 $paymentRequest->setReference('REF123');
-            
+
                 // URL para onde o comprador será redirecionado (GET) após o fluxo de pagamento
-                // $paymentRequest->setRedirectUrl('https://www.amazon.com.br/');
-            
+                $paymentRequest->setRedirectUrl('https://zebrinha.gjdesenvolvimento.com.br');
+
                 // URL para onde serão enviadas notificações (POST) indicando alterações no status da transação
-                $paymentRequest->addParameter('notificationURL', 'https://tutoriaiseinformatica.com/sdkpagseguro/response.php');
-            
+                $paymentRequest->addParameter('notificationURL', 'https://zebrinha.gjdesenvolvimento.com.br/checkout/pagamento');
+
                 $paymentRequest->addParameter('senderBornDate', '07/05/1981');
-            
+
                 try {
                     $onlyCheckoutCode = true;
                     $credentials = PagSeguroConfig::getAccountCredentials(); // getApplicationCredentials()
                     $checkoutUrl = $paymentRequest->register($credentials, $onlyCheckoutCode);
-            
+
                     echo "<script>PagSeguroLightbox('" . $checkoutUrl . "');</script>";
+
                 } catch (PagSeguroServiceException $e) {
                     die($e->getMessage());
                 }
+
             }
             ?>
         @endif
 
+
+
     </div>
 </div>
+
+
