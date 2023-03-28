@@ -40,6 +40,8 @@
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="{{asset('css/util.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/main.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/toastr.css') }}">
+
     @livewireStyles
     @yield('scriptjs')
 
@@ -48,12 +50,16 @@
 <body class="animsition">
 @yield('body')
 @component('components.footer')@endcomponent
+@component('components.modalAceite')@endcomponent
+
 
 
 <!-- Back to top -->
 
 <!--===============================================================================================-->
 <script src="{{asset('vendor/jquery/jquery-3.2.1.min.js')}}"></script>
+<script src="{{ asset('js/toastr.min.js') }}"></script>
+
 <!--===============================================================================================-->
 <script src="{{asset('vendor/animsition/js/animsition.min.js')}}"></script>
 <!--===============================================================================================-->
@@ -103,6 +109,62 @@
 <script src="{{asset('vendor/sweetalert/sweetalert.min.js')}}"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "10000",
+        "extendedTimeOut": "5000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+</script>
+@if ($message = Session::get('success'))
+    <<script type="text/javascript">
+        toastr.success("{{ $message }}");
+    </script>
+
+    </script>
+@endif
+
+
+@if ($message = Session::get('error'))
+    <script type="text/javascript">
+        toastr.error("{{ $message }}");
+    </script>
+@endif
+
+
+@if ($message = Session::get('warning'))
+    <script type="text/javascript">
+        toastr.warning("{{ $message }}");
+    </script>
+@endif
+
+
+@if ($message = Session::get('info'))
+    <div class="alert alert-info alert-block">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>{{ $message }}</strong>
+    </div>
+@endif
+
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        Please check the form below for errors
+    </div>
+@endif
+<script>
     $('.js-addwish-b2').on('click', function(e){
         e.preventDefault();
     });
@@ -130,12 +192,13 @@
 
     /*---------------------------------------------*/
 
-    $('.js-addcart-detail').each(function(){
-        var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
-        $(this).on('click', function(){
-            swal(nameProduct, "Produto adicionado ao carinho !", "success");
-        });
-    });
+    function addProductcart(){
+            var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+            $(this).on('click', function(){
+                swal(nameProduct, "Produto adicionado ao carinho !", "success");
+            });
+    }
+
     $('.js-addadress').each(function(){
         $(this).on('click', function(){
             swal({
@@ -159,6 +222,28 @@
             });
         });
     });
+
+
+
+    function addFrete(){
+        swal({
+            title: "Atenção!",
+            text: "Você precisa adicionar um item ao carrinho para avançar a proxima etapa!",
+            icon: "warning",
+            buttons: false,
+            dangerMode: false,
+        });
+    }
+
+    function addTamanho(){
+        swal({
+            title: "Atenção!",
+            text: "Por favor, Selecione um tamanho antes de prosseguir!",
+            icon: "warning",
+            buttons: false,
+            dangerMode: false,
+        });
+    }
 
     $('.js-addproduct').each(function(){
         $(this).on('click', function(){

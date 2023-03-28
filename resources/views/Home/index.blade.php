@@ -1,5 +1,5 @@
 <!-- Slider -->
-@component('home.banner')@endcomponent
+@component('Home.banner')@endcomponent
 
 
 <!-- Banner -->

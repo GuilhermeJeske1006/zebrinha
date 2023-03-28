@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('pedidos', function (Blueprint $table) {
             $table->increments("id");
             $table->dateTime("dataPedido");
-            $table->string("status", 4);
+            $table->string('reference');
+            $table->string("status", 20);
             $table->integer("usuario_id")->unsigned();
             $table->timestamps();
 

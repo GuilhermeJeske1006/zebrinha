@@ -85,13 +85,13 @@
 
                             <div class="size-204 respon6-next">
                                 <div class="rs1-select2 bor8 bg0">
-                                    <select onclick="verifica()" class="js-select2" id="tamanho">
-                                        <option  value="">Selecione o tamanho</option>
+                                    <select onclick="verifica()" onchange="atualizaQuantidadeMaxima()" class="js-select2" name="tamanho" id="tamanho">
+                                        <option value="">Selecione o tamanho</option>
                                         @foreach($tamanhos as $item)
-                                        <option  value="{{$item->tamanho}}">{{$item->tamanho}}</option>
+                                            <option value="{{$item->tamanho}}" data-quantidade="{{$item->qtdTamanho}}">{{$item->tamanho}}</option>
                                         @endforeach
-
                                     </select>
+
                                     <div class="dropDownSelect2"></div>
                                 </div>
                             </div>
@@ -108,7 +108,7 @@
                                         <i class="fs-16 zmdi zmdi-minus"></i>
                                     </div>
 
-                                    <input class="mtext-104 cl3 txt-center num-product" type="number" name="quantity" id="qtd" value="1">
+                                    <input class="mtext-104 cl3 txt-center num-product" type="number"name="quantity" id="qtd" value="1" min="1">
 
                                     <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                         <i class="fs-16 zmdi zmdi-plus"></i>
@@ -134,7 +134,7 @@
                             <div class="size-204 respon6-next">
                                 <div class="bor8 bg0 m-b-22 d-flex">
                                     <input class="cep stext-111 cl8 plh3 size-111 p-lr-15" type="text"
-                                           name="cep" id="cep" placeholder="Insira o seu cep">
+                                           name="cep"  id="cep" placeholder="Insira o seu cep">
                                     <a
                                         onclick="calculaFrete()"
                                         class="flex-c-m stext-101 hov-btn3 p-lr-15 trans-04 pointer" >
@@ -153,11 +153,10 @@
                             </div>
 
                         </div>
-                            <input type="hidden" name="id" value="{{$produto->id}}">
+                            <input type="hidden" name="produtoId" value="{{$produto->id}}">
                             <input type="hidden" name="name" value="{{$produto->nome}}">
                             <input type="hidden" name="price" value="{{$produto->valor}}">
                             <input type="hidden" name="foto" value="{{$produto->foto}}">
-                            <input type="hidden" name="frete" value="20">
 
 
                         </form>
@@ -175,19 +174,19 @@
 
                         </div>
                     @endif
+
                     <!--  -->
                     <div class="flex-w flex-m p-l-100 p-t-40 respon7">
 
-                        <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Facebook">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{Request::url()}}" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" target="_blank" data-tooltip="Facebook">
                             <i class="fa fa-facebook"></i>
                         </a>
 
-                        <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Twitter">
+                        <a href="https://twitter.com/intent/tweet?url={{Request::url()}}" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" target="_blank" data-tooltip="Twitter">
                             <i class="fa fa-twitter"></i>
                         </a>
-
-                        <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Instagram">
-                            <i class="fa fa-instagram"></i>
+                        <a href="https://api.whatsapp.com/send?text={{Request::url()}}" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" target="_blank" data-tooltip="Whatsapp">
+                            <i class="fa fa-whatsapp"></i>
                         </a>
                     </div>
                 </div>
@@ -424,11 +423,19 @@
     </style>
 
     @section('scriptjs')
+
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
         <script defer>
             function calculaFrete(){
                 const apiKey = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImM4MzdjNDg5MmZlYWJkMTU2NjhhZjVkNDg4YjI0MzdlMmE1ZWM2YmUzYzYwNGIzYTk5ZjUxNTMxMDJjOGRlZTg4NjhmZTMyNWQ5Y2Q5ODNjIn0.eyJhdWQiOiIxIiwianRpIjoiYzgzN2M0ODkyZmVhYmQxNTY2OGFmNWQ0ODhiMjQzN2UyYTVlYzZiZTNjNjA0YjNhOTlmNTE1MzEwMmM4ZGVlODg2OGZlMzI1ZDljZDk4M2MiLCJpYXQiOjE2Nzc1OTIxMjIsIm5iZiI6MTY3NzU5MjEyMiwiZXhwIjoxNzA5MTI4MTIyLCJzdWIiOiJiMjY4OTg0Yy0yZTUzLTRiZDEtYWE2MC1mNWU0ODczZjUwODUiLCJzY29wZXMiOlsiY2FydC1yZWFkIiwiY2FydC13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiY29tcGFuaWVzLXdyaXRlIiwiY291cG9ucy1yZWFkIiwiY291cG9ucy13cml0ZSIsIm5vdGlmaWNhdGlvbnMtcmVhZCIsIm9yZGVycy1yZWFkIiwicHJvZHVjdHMtcmVhZCIsInByb2R1Y3RzLWRlc3Ryb3kiLCJwcm9kdWN0cy13cml0ZSIsInB1cmNoYXNlcy1yZWFkIiwic2hpcHBpbmctY2FsY3VsYXRlIiwic2hpcHBpbmctY2FuY2VsIiwic2hpcHBpbmctY2hlY2tvdXQiLCJzaGlwcGluZy1jb21wYW5pZXMiLCJzaGlwcGluZy1nZW5lcmF0ZSIsInNoaXBwaW5nLXByZXZpZXciLCJzaGlwcGluZy1wcmludCIsInNoaXBwaW5nLXNoYXJlIiwic2hpcHBpbmctdHJhY2tpbmciLCJlY29tbWVyY2Utc2hpcHBpbmciLCJ0cmFuc2FjdGlvbnMtcmVhZCIsInVzZXJzLXJlYWQiLCJ1c2Vycy13cml0ZSIsIndlYmhvb2tzLXJlYWQiLCJ3ZWJob29rcy13cml0ZSIsInRkZWFsZXItd2ViaG9vayJdfQ.ZpXNoQJlNevstIsKb_kk0b-u8yOPaasi5mt-4nyU3Sbl6dQ8UdQxq8QJEtfSgvzywHUD6zEuCD0I5zGaYwv2-ZMXnaT9-mk1LYnQpbFUQTOnHmc8UbDs3w84IFrr-PUDOL6rxLrcwzZXj0ZF2WIfvSIx_gN62ToYgqusH0rfMz84LX_VsuWJ0oWLoqIq5eHrZueMvWyynu5tByJw0PgTBFgo4vmrUUzIqJ3_kOTcDQrGah3YpzF3SWF8ZG65mcygww5IJEy6zGcPA8IeELKLxsl6NVWG1AZbSE3BXhiJ-4PH3TGFTbbHlxLM1te5TJEhAlUZ0KnzswHn037ZH1wZRj2rNKr4-QLOHmq6HW1Tf44Fu9hBqE7ea5Y1bwEcrjxwN79Stv1bybZXZ8rImYTNcW-Oep4nEvFz5KPOHdWxdnOPsTfvb4J71jyuWzeKbcLOk0o3wOzfJpC9LuRZWHVNSgBmrJFtNVhNLmVnBveGa43m_7cDAn6NedZicvV5u_t-xyo_h69pZCY2OuyF4Y0xhogY7Bw5yUA-qqvW1-gh88aV_abjesWHN3QwdBoiFCgsfCG4sbVxKFcHuqiUX3VsoK1zcWFwB2FCdj2aBJRKIHrjvjDoGYWMyopDykmG-S6q-Hr9hk3L0uKnQqSywfLWN5m6cdzrLBbvXzJAfwMgn-Q';
+
+                let b = document.getElementById('container')
+                if(b.children.length > 1){
+                    while (b.firstChild) {
+                        b.removeChild(b.firstChild);
+                    }
+                }
 
                 axios.get('https://melhorenvio.com.br/api/v2/me/shipment/calculate', {
                     headers: {
@@ -451,7 +458,8 @@
                     }
                 })
                     .then(response => {
-                        console.log(response.data)
+                        console.log(response.data.length)
+
                         var b = document.createElement('b');
                         b.innerHTML = "<b>Valor do Frete : </b>"
                         document.getElementById('container').appendChild(b);
@@ -475,14 +483,14 @@
             function valid() {
                 var comboNome = document.getElementById("tamanho");
                 if (comboNome.options[comboNome.selectedIndex].value == "" ){
-                    alert("Por favor, Selecione um tamanho antes de prosseguir!");
+                    addTamanho()
                     return false
                 }
                 else{
                     document.getElementById("addcart").style.display = "none";
                     var html = `
             <button style="text-align: center;
-                            font-size: 14px;"  type="submit"  class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                            font-size: 14px;"  type="submit" id="btnaddcart" onclick="addProductcart()" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
                                 Adicionar ao carrinho
                         </button>
             `
@@ -498,21 +506,65 @@
                 // seleciona o elemento select
                 const mySelect = $("#tamanho");
 
+
                 // adiciona um listener para o evento "change" do elemento select
                 mySelect.change(() => {
-                    document.getElementById("addcart").style.display = "none";
-                    var html = `
+                   let  addcart = document.getElementById('addcart')
+                    if(addcart != null  || addcart != undefined)
+                        addcart.remove()
+                   const btnaddcart =  document.getElementById("btnaddcart");
+                    const divAdd = document.getElementById("divAdd");
+
+                    if(mySelect.val() != ""){
+                        if(addcart != null  || addcart != undefined)
+                            addcart.remove()
+                        if(btnaddcart == null  || btnaddcart == undefined){
+                            var html = `
             <button style="text-align: center;
-                            font-size: 14px;"  type="submit"  class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                            font-size: 14px;"  type="submit" id="btnaddcart" onclick="addProductcart()" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
                                 Adicionar ao carrinho
                         </button>
             `
-                    let div = document.createElement('button');
-                    div.innerHTML = html;
-                    document.getElementById('divAdd').appendChild(div);
+                            let div = document.createElement('button');
+                            div.innerHTML = html;
+                            document.getElementById('divAdd').appendChild(div);
+                        }
+                    }
+
+                    if(mySelect.val() == ""){
+                        if(btnaddcart != null  || btnaddcart != undefined)
+                            btnaddcart.remove()
+                        if(addcart == null  || addcart == undefined){
+                            var html = `
+           <a style="text-align: center;
+                                font-size: 14px;color: #fff;" onclick="valid(); addProductcart()" id="addcart" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+                                    Adicionar ao carrinho
+                            </a>
+            `
+                            let div = document.createElement('a');
+                            div.innerHTML = html;
+                            document.getElementById('divAdd').appendChild(div);
+                        }
+
+                    }
+
+
                 });
             });
         </script>
+
+        <script>
+            function atualizaQuantidadeMaxima() {
+                var selectTamanho = document.getElementById("tamanho");
+                var inputQuantidade = document.getElementById("qtd");
+                var maxQuantidade = parseInt(selectTamanho.options[selectTamanho.selectedIndex].dataset.quantidade);
+                inputQuantidade.max = maxQuantidade;
+                if (parseInt(inputQuantidade.value) > maxQuantidade) {
+                    inputQuantidade.value = maxQuantidade;
+                }
+            }
+        </script>
+
 
     @endsection
 @endsection

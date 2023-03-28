@@ -59,6 +59,9 @@
                             <a class="active" href="{{route('index')}}">Home</a>
                         </li>
                         <li>
+                            <a href="{{route('sobre')}}">Quem somos</a>
+                        </li>
+                        <li>
                             <a href="{{route('produtos')}}">Produtos</a>
                         </li>
                         <li>
@@ -133,7 +136,9 @@
             <li>
                 <a href="{{route('index')}}">Home</a>
             </li>
-
+            <li>
+                <a href="{{route('sobre')}}">Quem somos</a>
+            </li>
             <li>
                 <a href="{{route('produtos')}}">Produtos</a>
             </li>
@@ -145,7 +150,7 @@
 
 </header>
 
-@component('home.Cart', ['carrinho' => $carrinho])@endcomponent
+@component('Home.Cart', ['carrinho' => $carrinho])@endcomponent
 
 <style>
     .btn-logout {

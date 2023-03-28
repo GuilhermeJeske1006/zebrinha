@@ -7,7 +7,11 @@ use Illuminate\Http\Request;
 class AboutController extends Controller
 {
     public function Index(){
-        return view('About.index');
+        $carrinho = \Cart::getContent();
+        return view('About.index',
+            [
+                'carrinho' => $carrinho
+            ]);
     }
 
 }

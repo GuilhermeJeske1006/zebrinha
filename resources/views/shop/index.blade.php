@@ -102,14 +102,16 @@
                 @if (count($lista) > 0)
                 @component('components.card', ['lista' => $lista])@endcomponent
                 @else
-                <div class="container">
-                    <div class="col-12">
-                        <div class="row d-flex " style="justify-content: center;">
-                            <h3 style="text-align: end">Nenhum produto encontrado!</h3>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h4 class="mtext-109 cl2 p-b-30" style="text-align: center;">
+                                    Nenhum Produto encontrado
+                                </h4>
+                            </div>
+
                         </div>
                     </div>
-
-                </div>
                 @endif
 
 

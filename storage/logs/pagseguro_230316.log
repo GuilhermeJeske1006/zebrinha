@@ -1,0 +1,4 @@
+
+16/03/2023 16:42:35 PagSeguro.Session[info]: Begin
+16/03/2023 16:42:35 PagSeguro.Session[info]: POST: https:///v2/sessions?
+16/03/2023 16:42:38 PagSeguro.Session[error]: CURL can't connect: Could not resolve host: v2

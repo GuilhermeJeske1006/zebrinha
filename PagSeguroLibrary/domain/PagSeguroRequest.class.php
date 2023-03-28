@@ -425,9 +425,9 @@ class PagSeguroRequest
     {
         $this->getAcceptedPaymentMethod()->addConfig(
             new PagSeguroAcceptPaymentMethod($group, $name)
-        );  
+        );
     }
-    
+
     /***
      * Exclude groups and payment methods.
      */
@@ -435,7 +435,7 @@ class PagSeguroRequest
     {
         $this->getAcceptedPaymentMethod()->addConfig(
             new PagSeguroExcludePaymentMethod($group, $name)
-        ); 
+        );
     }
 
     /***

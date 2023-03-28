@@ -38,6 +38,18 @@
 
             </div>
 
+            @if(count($listaPedido) == 0)
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4 class="mtext-109 cl2 p-b-30" style="text-align: center;">
+                                Nenhum Pedido encontrado.
+                            </h4>
+                        </div>
+
+                    </div>
+                </div>
+            @else
             <div class="row d-flex">
                 @foreach ($listaPedido as $item)
                 <div class="col-sm-12 col-md-12 col-lg-12 p-b-35 isotope-item women">
@@ -45,7 +57,7 @@
                     <div class="block2">
                         <div class="card">
                             <div class="card-header">
-                                {{$item->dt_item}}
+                                {{ date('d/m/Y H:i', strtotime($item->dt_item)) }}
                               </div>
                             <div class="card-body">
                                 <div class="col-12 col-md-12 d-flex">
@@ -61,13 +73,33 @@
                                         <p class="stext-107">
                                             Quantidade: {{$item->quantidade}}
                                         </p>
-                                        
+
                                     </div>
                                     <div class="col-2">
                                         <p class="stext-107">
-                                          Status:  {{$item->status}}
+                                            Status:
+                                            @switch($item->status)
+                                                @case('WAITING_PAYMENT')
+                                                    Aguardando pagamento
+                                                @break
+                                                @case('PAID')
+                                                    Pago
+                                                    @break
+                                                @case('AVAILABLE')
+                                                    Disponível
+                                                    @break
+                                                @case('IN_DISPUTE')
+                                                    Em disputa
+                                                    @break
+                                                @case('CANCELLED')
+                                                    Cancelado
+                                                    @break
+                                                @case('REFUNDED')
+                                                    Devolvido
+                                                    @break
+                                            @endswitch
                                         </p>
-                                        
+
                                     </div>
                                     <div class="col-2">
                                         <a class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" style="height: 30px" href="{{route('details',  ['id' => $item->id])}}">Ver Produto</a>
@@ -77,15 +109,15 @@
                         </div>
                     </div>
                 </div>
-             
+
                 @endforeach
-                    
-                  
+
+
 
 
             </div>
             @component('vendor.pagination.simple-default', ['paginator' => $listaPedido])@endcomponent
-
+            @endif
         </div>
     </div>
     @endsection

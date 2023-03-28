@@ -2,21 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Email;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EnviarEmail;
+use Illuminate\Support\Facades\DB;
+
 
 class EmailController extends Controller
 {
     public function enviar(Request $request)
     {
-        $dados = [
-            'email' => $request->input('email'),
-            'mensagem' => $request->input('mensagem')
-        ];
+        $email = new Email();
+        $email->email = $request->email;
+        $email->mensagem = $request->mensagem;
 
-        Mail::to('guilhermeieski@gmail.cm')->send(new EnviarEmail($dados));
+        try {
+            DB::beginTransaction();
+            $email->save();
+            DB::commit();
 
-        return redirect()->back()->with('sucesso', 'E-mail enviado com sucesso!');
+            return back()->with('success','E-mail enviado com sucesso!!');
+
+        }catch (\Exception $e){
+            DB::rollBack();
+            return back()->with('error','Erro ao enviar email');
+        }
     }
 }

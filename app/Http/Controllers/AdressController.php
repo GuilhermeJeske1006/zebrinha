@@ -25,17 +25,14 @@ class AdressController extends Controller
             $endereco->save();
             DB::commit();
 
-            //return [ 'status' => 'Ok', 'message' => 'Endereço cadastrado com sucesso!'];
-            return redirect()
-                ->to(url()->previous());
+            return back()->with('success','Endereço cadastrado com sucesso!');
+
         }catch (\Exception $e){
             DB::rollBack();
-            return [ 'status' => 'err', 'message' => 'Erro ao cadastrar endereço!'];
+            return back()->with('error','Erro ao cadastrar endereço!');
 
         }
 
-//        return redirect()
-//            ->to(url()->previous());
     }
 
     public function edit(Request $request)
@@ -55,13 +52,11 @@ class AdressController extends Controller
             DB::beginTransaction();
             $endereco->save();
             DB::commit();
+            return back()->with('success','Endereço atualizado com sucesso!');
 
-            //return [ 'status' => 'Ok', 'message' => 'Endereço cadastrado com sucesso!'];
-            return redirect()
-                ->to(url()->previous());
         }catch (\Exception $e){
             DB::rollBack();
-            return [ 'status' => 'err', 'message' => 'Erro ao cadastrar endereço!'];
+            return back()->with('error','Erro ao atualizar endereço!');
 
         }
     }

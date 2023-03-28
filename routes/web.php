@@ -6,6 +6,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AdressController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\AboutController;
 
 
 
@@ -35,6 +36,8 @@ Route::post('/comentar', [ShopController::class, 'Comentar'])->name('comentar');
 Route::match(['get', 'post'], '/excluircarrinho', [ShopController::class, 'excluirCarrinho'])->name('excluir_carrinho');
 Route::get('/endereco', [AdressController::class, 'Endereco'])->name('endereco');
 Route::post('/enviar-email', [EmailController::class, 'enviar'])->name('enviar_email');
+Route::post('/enviar-newsletter', [ProfileController::class, 'enviarNewsletter'])->name('enviar_newsletter');
+Route::match(['get', 'post'],'/checkout/pagamento', [ShopController::class, 'getPagamento'])->name('getPagamento');
 
 
 
@@ -42,12 +45,12 @@ Route::middleware([
     'auth:sanctum',
     'verified'
 ])->group(function () {
+
     Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
     Route::get('/perfil', [ProfileController::class, 'Perfil'])->name('perfil');
     Route::put('/perfil/editar', [ProfileController::class, 'editPerfil'])->name('edit_perfil');
     Route::get('/checkout', [ShopController::class, 'Check'])->name('checkout');
     Route::get('/compras/historico', [ShopController::class, 'historico'])->name('compra_historico');
-    Route::get('/checkout/pagamento', [ShopController::class, 'getPagamento'])->name('ir_ao_pagamento');
     Route::post('/finalizar/pedido', [ShopController::class, 'finalizarPedido'])->name('finalizar_pedido');
     Route::put('/endereco/edit', [AdressController::class, 'edit'])->name('endereco.edit');
     Route::match(['get', 'post'],'/enviar/endereco', [AdressController::class, 'adicionarEndereco'])->name('adicionar_endereco');

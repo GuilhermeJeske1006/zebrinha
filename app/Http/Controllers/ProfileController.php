@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Newsletter;
 
 class ProfileController extends Controller
 {
@@ -24,5 +25,13 @@ class ProfileController extends Controller
         User::findOrFail($request->id)->update($request->all());
         return redirect()->route('perfil');
 
+    }
+
+    public function enviarNewsletter(Request $request){
+        $Newsletter = new Newsletter();
+        $Newsletter->email = $request->email;
+        $Newsletter->save();
+
+        return redirect()->route('index');
     }
 }

@@ -86,13 +86,13 @@ class ShopController extends Controller
                         ->get();
 
         $tamanhos = DB::select(
-            'select * from Tamanhos where produto_id =' .$id);
+            'select * from tamanhos where produto_id =' .$id);
 
         $Imagens = DB::select(
-            'select * from Imagems where produto_id =' .$id);
+            'select * from imagems where produto_id =' .$id);
 
         $cores = DB::select(
-            'select * from Imagems where produto_id =' .$id );
+            'select * from imagems where produto_id =' .$id );
 
         $carrinho = \Cart::getContent();
 
@@ -115,28 +115,36 @@ class ShopController extends Controller
         $comentario->produto_id = $request->produto_id;
         $comentario->estrela    = $request->estrela;
 
-        $comentario->save();
+        try {
+            DB::beginTransaction();
+            $comentario->save();
+            DB::commit();
 
-        return redirect()
-            ->to(url()->previous())
-            ->with('msg', 'Comentado com suceso');
+            return back()->with('success','Comentário feito com sucesso!!');
+
+        }catch (\Exception $e){
+            DB::rollBack();
+            return back()->with('error','Erro ao fazer comentário. Tente novamente!');
+        }
     }
 
 
     public function adicionarCarrinho( Request $request){
-        //$prod = Produto::find($idProduto);
 
-        \Cart::add([
-            'id' => $request->id,
-            'name' => $request->name,
-            'price' => $request->price,
-            'quantity' => $request->quantity,
-            'attributes' => array(
-                'foto' => $request->foto,
-                'tamanho' => $request->tamanho,
-                'frete' => $request->frete,
-            )
-        ]);
+            $unique_id = uniqid();
+            \Cart::add([
+                'id' => $unique_id,
+                'name' => $request->name,
+                'price' => $request->price,
+                'quantity' => $request->quantity,
+                'attributes' => array(
+                    'foto' => $request->foto,
+                    'tamanho' => $request->tamanho,
+                    'frete' => $request->frete,
+                    'produtoId'   => $request->produtoId,
+
+                )
+            ]);
 
         return  redirect()
            ->to(url()->previous());
@@ -151,20 +159,20 @@ class ShopController extends Controller
 
     }
 
-    public function finalizarPedido(Request $request){
+    public function finalizarPedido(){
+
         $prods = \Cart::getContent();
         $vendaService = new VendaService();
         $result = $vendaService->finalizarVenda($prods, Auth::user());
 
        \Cart::clear();
 
-
-
         return redirect()->route('index');
     }
 
     public function historico(Request $request){
         $carrinho = \Cart::getContent();
+
 
         $idUsuario = Auth::user()->id;
 
@@ -177,6 +185,7 @@ class ShopController extends Controller
                         ->join('produtos as R', 'R.id', '=', 'I.produto_id')
                         ->where('P.usuario_id', '=', $idUsuario)
                         ->where('R.nome', 'like', '%'.$search.'%')
+                        ->orderBy('P.id', 'Desc')
                         ->simplePaginate(10);
         }
         else {
@@ -185,6 +194,7 @@ class ShopController extends Controller
                         ->join('pedidos as P', 'P.id', '=', 'I.pedido_id')
                         ->join('produtos as R', 'R.id', '=', 'I.produto_id')
                         ->where('P.usuario_id', '=', $idUsuario)
+                        ->orderBy('P.id', 'Desc')
                         ->simplePaginate(10);
         }
 
@@ -195,15 +205,12 @@ class ShopController extends Controller
     }
 
     public function getPagamento(){
-        $data = [];
-        $itens = \Cart::getContent();
-        $user = Auth::user()->id;
-        $endereco = DB::select(
-            'select * from enderecos where usuario_id = '.$user);
 
-        $data["carrinho"] = $itens;
-        $data["endereco"] = $endereco;
+        $carrinho = \Cart::getContent();
 
-        return view('pagamento.index', $data);
+        return view('pagamento.index',
+        [
+            'carrinho' => $carrinho
+        ]);
     }
 }
