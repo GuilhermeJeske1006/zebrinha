@@ -14,9 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('cors', function (Blueprint $table) {
-            $table->id();
+            $table->increments("id");
             $table->string('cor');
-            $table->integer('tamanho_id')->unsigned();
             $table->integer('produto_id')->unsigned();
             $table->timestamps();
 
@@ -24,9 +23,6 @@ return new class extends Migration
                 ->references("id")->on("produtos")
                 ->onDelete("cascade");
 
-            $table->foreign("tamanho_id")
-                ->references("id")->on("tamanhos")
-                ->onDelete("cascade");
         });
     }
 

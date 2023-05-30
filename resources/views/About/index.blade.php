@@ -5,9 +5,9 @@
 
 
 <!-- Title page -->
-<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('images/bg-01.jpg');">
+<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('images/fundo_preto.jpg');">
     <h2 class="ltext-105 cl0 txt-center">
-        Sobre-nós
+        Sobre nós
     </h2>
 </section>
 
@@ -19,27 +19,31 @@
             <div class="col-md-7 col-lg-8">
                 <div class="p-t-7 p-r-85 p-r-15-lg p-r-0-md">
                     <h3 class="mtext-111 cl2 p-b-16">
-                        Our Story
+                        Quem somos?
                     </h3>
 
                     <p class="stext-113 cl6 p-b-26">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consequat consequat enim, non auctor massa ultrices non. Morbi sed odio massa. Quisque at vehicula tellus, sed tincidunt augue. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas varius egestas diam, eu sodales metus scelerisque congue. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Maecenas gravida justo eu arcu egestas convallis. Nullam eu erat bibendum, tempus ipsum eget, dictum enim. Donec non neque ut enim dapibus tincidunt vitae nec augue. Suspendisse potenti. Proin ut est diam. Donec condimentum euismod tortor, eget facilisis diam faucibus et. Morbi a tempor elit.
-                    </p>
+                        Bem-vindo ao Zebrinha Kids, sua loja online de roupas infantis que oferece uma variedade de produtos para crianças. Acreditamos que roupas infantis devem ser confortáveis, coloridas e de alta qualidade, para garantir que as crianças se sintam bem e possam se divertir livremente.                    </p>
 
                     <p class="stext-113 cl6 p-b-26">
-                        Donec gravida lorem elit, quis condimentum ex semper sit amet. Fusce eget ligula magna. Aliquam aliquam imperdiet sodales. Ut fringilla turpis in vehicula vehicula. Pellentesque congue ac orci ut gravida. Aliquam erat volutpat. Donec iaculis lectus a arcu facilisis, eu sodales lectus sagittis. Etiam pellentesque, magna vel dictum rutrum, neque justo eleifend elit, vel tincidunt erat arcu ut sem. Sed rutrum, turpis ut commodo efficitur, quam velit convallis ipsum, et maximus enim ligula ac ligula.
-                    </p>
+                        Nossa coleção inclui uma grande variedade de roupas para meninos e meninas, incluindo camisetas, blusas, shorts, calças, saias, vestidos e muito mais. Com uma ampla seleção de estilos e estampas, temos certeza de que você encontrará o visual perfeito para o seu filho ou filha.                    </p>
 
                     <p class="stext-113 cl6 p-b-26">
-                        Any questions? Let us know in store at 8th floor, 379 Hudson St, New York, NY 10018 or call us on (+1) 96 716 6879
+                        Além disso, nossas roupas são feitas de materiais de alta qualidade, garantindo que elas durem por muito tempo. Todos os nossos produtos são cuidadosamente selecionados e testados para garantir a melhor qualidade possível.               
                     </p>
+                    <p class="stext-113 cl6 p-b-26">
+                        Nosso objetivo é fornecer roupas infantis de alta qualidade a preços acessíveis para todos os pais e crianças. É por isso que oferecemos preços justos e competitivos, para que você possa economizar dinheiro enquanto compra roupas incríveis para seus filhos.                    </p>
+                    <p class="stext-113 cl6 p-b-26">
+                        Não importa se você está procurando roupas para o dia a dia ou para ocasiões especiais, o Zebrinha Kids tem tudo o que você precisa. Oferecemos uma experiência de compra fácil e segura, com envio rápido e frete grátis em pedidos acima de determinado valor.                    </p>
+                    <p class="stext-113 cl6 p-b-26">
+                        Não perca mais tempo procurando a roupa perfeita para seus filhos. Visite o Zebrinha Kids hoje e encontre as melhores roupas infantis para meninos e meninas!                    </p>
                 </div>
             </div>
 
             <div class="col-11 col-md-5 col-lg-4 m-lr-auto">
-                <div class="how-bor1 ">
+                <div class=" ">
                     <div class="hov-img0">
-                        <img src="images/about-01.jpg" alt="IMG">
+                        <img src="images/logo_sobre.jpg" alt="IMG">
                     </div>
                 </div>
             </div>

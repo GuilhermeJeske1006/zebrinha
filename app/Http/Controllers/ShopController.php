@@ -46,6 +46,8 @@ class ShopController extends Controller
         $listaProdutos = $itens->simplePaginate(16);
         $listaCategorias = Categoria::all();
         $carrinho = \Cart::getContent();
+        $title = "Produtos - Zebrinha Kids";
+
 
         return view('shop.index', [
             'lista' => $listaProdutos,
@@ -53,6 +55,7 @@ class ShopController extends Controller
             'idcategoria' => $idCategoria,
             'carrinho' => $carrinho,
             'search' => $search,
+            'title' => $title
         ]);
     }
 
@@ -69,11 +72,18 @@ class ShopController extends Controller
 
 
         $carrinho = \Cart::getContent();
+        $produtos_json = $carrinho->toJson();
+        $title = "Checkout - Zebrinha Kids";
+
+    
+
 
         return view('CheckOut.index', [
             'carrinho' => $carrinho,
             'endereco' => $endereco,
-            'cep'      => $cep
+            'cep'      => $cep,
+            'produtos_json' => $produtos_json,
+            'title' => $title
         ]);
     }
 
@@ -92,9 +102,12 @@ class ShopController extends Controller
             'select * from imagems where produto_id =' .$id);
 
         $cores = DB::select(
-            'select * from imagems where produto_id =' .$id );
+            'select * from cors where produto_id =' .$id );
 
         $carrinho = \Cart::getContent();
+
+        $title = $produto->nome;
+
 
         return view('shop.details',
             [
@@ -104,6 +117,7 @@ class ShopController extends Controller
                 'imagens' => $Imagens,
                 'carrinho' => $carrinho,
                 'cores'   => $cores,
+                'title' => $title,
             ]);
     }
 
@@ -142,6 +156,7 @@ class ShopController extends Controller
                     'tamanho' => $request->tamanho,
                     'frete' => $request->frete,
                     'produtoId'   => $request->produtoId,
+                    'cor' => $request->cor,
 
                 )
             ]);
@@ -196,21 +211,117 @@ class ShopController extends Controller
                         ->where('P.usuario_id', '=', $idUsuario)
                         ->orderBy('P.id', 'Desc')
                         ->simplePaginate(10);
+
         }
+
+        $title = "Histórico de compras";
+
 
         return view('profile.historico',[
             'carrinho' => $carrinho,
             'listaPedido' => $listaPedido,
+            'title' => $title,
         ]);
     }
 
     public function getPagamento(){
 
         $carrinho = \Cart::getContent();
+        $title = "";
+
+        
+
 
         return view('pagamento.index',
         [
-            'carrinho' => $carrinho
+            'carrinho' => $carrinho,
+            'title' => $title
         ]);
     }
+
+    public function pagamentoPix(){
+
+        $carrinho = \Cart::getContent();
+        $title = "";
+
+
+        return view('pagamento.pix',
+        [
+            'carrinho' => $carrinho,
+            'title' => $title
+        ]);
+    }
+
+    public function tamanhosParaCor($cor, $produto_id)
+    {
+        // Busca os tamanhos para a cor especificada
+        $tamanhos = DB::table('tamanhos')
+            ->join('cors', 'tamanhos.cor_id', '=', 'cors.id')
+            ->join('produtos', 'cors.produto_id', '=', 'produtos.id')
+            ->select('tamanhos.tamanho', 'tamanhos.qtdTamanho')
+            ->where('cors.cor', '=', $cor)
+            ->where('produtos.id', '=', $produto_id)
+            ->get();
+
+
+        // Retorna os tamanhos como um array em JSON
+        return response()->json($tamanhos);
+    }
+
+
+    public function pagamento(){
+        $user = Auth::user()->id;
+        $endereco = DB::select(
+            'select * from enderecos where usuario_id = '.$user);
+
+        $cep = DB::table('enderecos')
+        ->where('usuario_id', $user)
+        ->first();
+        
+        $curl = curl_init();
+
+        $curl = curl_init();
+
+        $data = array(
+            "type" => "card"
+        );
+        
+        $payload = json_encode($data);
+        
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "https://sandbox.api.pagseguro.com/public-keys",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $payload,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer 3EADF66FE76B407894FC414D33893228",
+                "Content-Type: application/json",
+                "Accept: application/json"
+            ],
+        ]);
+        
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        
+        curl_close($curl);
+        
+        $carrinho = \Cart::getContent();
+        $produtos_json = $carrinho->toJson();
+        $title = "Checkout - Zebrinha Kids";
+
+
+        return view('CheckOut.payModal', [
+            'response'  => json_decode($response, true),
+            'carrinho' => $carrinho,
+            'endereco' => $endereco,
+            'cep'      => $cep,
+            'produtos_json' => $produtos_json,
+            'title' => $title
+        ]);
+    }
+
 }

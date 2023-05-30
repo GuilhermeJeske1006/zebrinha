@@ -27,7 +27,7 @@ class PagSeguroConfigWrapper
     /**
      * production or sandbox
      */
-    const PAGSEGURO_ENV = "sandbox";
+    const PAGSEGURO_ENV = "production";
     /**
      *
      */
@@ -35,7 +35,7 @@ class PagSeguroConfigWrapper
     /**
      *
      */
-    const PAGSEGURO_TOKEN_PRODUCTION = "3EADF66FE76B407894FC414D33893228";
+    const PAGSEGURO_TOKEN_PRODUCTION = "b6a96588-9307-4e89-8f77-8396919b1172e372748a456d94b3c65b6ec60f8dace92b6e-b93f-47fb-835e-52f3392b639e";
     /**
      *
      */

@@ -60,23 +60,36 @@
                                 {{ date('d/m/Y H:i', strtotime($item->dt_item)) }}
                               </div>
                             <div class="card-body">
-                                <div class="col-12 col-md-12 d-flex">
-                                    <div class="col-5">
+                                <div class="col-12 col-md-12 display_history d-flex">
+                                    <div class="col-12 col-sm-3">
                                         <div class="d-flex ml-4">
-                                        <img src="{{$item->foto}}" style="max-width: 15%;" alt="..." class="img-thumbnail">
+                                        
+                                            <img src="{{ $admin_url . '/' . str_replace('public/', 'storage/', $item->foto) }}" style="max-width: 15%;" alt="..." class="img-thumbnail">
+                                            <div class="d-grid">
                                         <div class="d-grid ml-3">
-                                            <p class="stext-107"><b class="black">{{$item->nome}}</b> </p>
+                                            <p class="stext-107 "><b class="black">{{$item->nome}}</b> </p>
+                                        </div>
+                                        <div class="d-grid ml-3">
+                                            <p class="stext-107 "> {{$item->cor}}</p>
                                         </div>
                                     </div>
                                     </div>
-                                    <div class="col-3">
-                                        <p class="stext-107">
+                                    </div>
+                                    <div class="col-sm-2 col-12">
+                                        <p class="stext-107 p_display">
+                                            Tamanho: {{$item->tamanho}}
+                                        </p>
+
+                                    </div>
+
+                                    <div class="col-sm-2 col-12">
+                                        <p class="stext-107 p_display">
                                             Quantidade: {{$item->quantidade}}
                                         </p>
 
                                     </div>
-                                    <div class="col-2">
-                                        <p class="stext-107">
+                                    <div class="col-sm-3 col-12">
+                                        <p class="stext-107 p_display">
                                             Status:
                                             @switch($item->status)
                                                 @case('WAITING_PAYMENT')
@@ -101,7 +114,7 @@
                                         </p>
 
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-sm-2 col-12">
                                         <a class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" style="height: 30px" href="{{route('details',  ['id' => $item->id])}}">Ver Produto</a>
                                     </div>
                                 </div>
@@ -120,4 +133,17 @@
             @endif
         </div>
     </div>
+
+    <style>
+        @media only screen and (max-width: 600px) {
+            .display_history {
+                display: grid !important;
+            }
+            .p_display {
+                text-align: center;
+                padding: 10px;
+            }
+        }
+
+    </style>
     @endsection

@@ -18,7 +18,7 @@
 
             var html = `
                 @if (isset($cep))
-            <form  action="{{ route('endereco.edit') }}" method="POST" >
+            <form  action="{{ route('endereco.edit') }}" method="POST" onsubmit="limparCookie('fretevlr')">
                         @csrf
                 @method('PUT')
                 <div class="container">
@@ -113,7 +113,7 @@
                         </div>
                         <div class="col-md-12 col-12 d-flex">
                             <div class="col-6 col-md-12" style="display: flex;flex-direction: row-reverse;">
-                                <button class="flex-c-m stext-101 cl0 size-112 bg7 bor11 hov-btn3 p-lr-15 trans-04 m-b-10" type="submit">
+                                <button  class="flex-c-m stext-101 cl0 size-112 bg7 bor11 hov-btn3 p-lr-15 trans-04 m-b-10" type="submit">
                                     Enviar
                                 </button>
                             </div>
@@ -138,165 +138,175 @@
         }
     </script>
 
-    <script>
-        $(document).ready(() => {
-            //  const axios = require('axios');
+<script>
+    $(document).ready(() => {
 
-            const originalUrl = window.location.href;
-            console.log(originalUrl);
+        //  const axios = require('axios');
 
-            // seleciona o elemento input
-            const myInput = $("#myInput");
+        // seleciona o elemento input
+        const myInput = $("#myInput");
 
-            // recupera o valor do input
-            var inputValue = myInput.val();
-            console.log(inputValue); // exibe o valor do input no console
+        // recupera o valor do input
+        var inputValue = myInput.val();
 
+        const produtos = JSON.parse(`{!! $produtos_json !!}`);
+        const arr = Object.values(produtos);
 
+        const apiKey =
+            'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImM4MzdjNDg5MmZlYWJkMTU2NjhhZjVkNDg4YjI0MzdlMmE1ZWM2YmUzYzYwNGIzYTk5ZjUxNTMxMDJjOGRlZTg4NjhmZTMyNWQ5Y2Q5ODNjIn0.eyJhdWQiOiIxIiwianRpIjoiYzgzN2M0ODkyZmVhYmQxNTY2OGFmNWQ0ODhiMjQzN2UyYTVlYzZiZTNjNjA0YjNhOTlmNTE1MzEwMmM4ZGVlODg2OGZlMzI1ZDljZDk4M2MiLCJpYXQiOjE2Nzc1OTIxMjIsIm5iZiI6MTY3NzU5MjEyMiwiZXhwIjoxNzA5MTI4MTIyLCJzdWIiOiJiMjY4OTg0Yy0yZTUzLTRiZDEtYWE2MC1mNWU0ODczZjUwODUiLCJzY29wZXMiOlsiY2FydC1yZWFkIiwiY2FydC13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiY29tcGFuaWVzLXdyaXRlIiwiY291cG9ucy1yZWFkIiwiY291cG9ucy13cml0ZSIsIm5vdGlmaWNhdGlvbnMtcmVhZCIsIm9yZGVycy1yZWFkIiwicHJvZHVjdHMtcmVhZCIsInByb2R1Y3RzLWRlc3Ryb3kiLCJwcm9kdWN0cy13cml0ZSIsInB1cmNoYXNlcy1yZWFkIiwic2hpcHBpbmctY2FsY3VsYXRlIiwic2hpcHBpbmctY2FuY2VsIiwic2hpcHBpbmctY2hlY2tvdXQiLCJzaGlwcGluZy1jb21wYW5pZXMiLCJzaGlwcGluZy1nZW5lcmF0ZSIsInNoaXBwaW5nLXByZXZpZXciLCJzaGlwcGluZy1wcmludCIsInNoaXBwaW5nLXNoYXJlIiwic2hpcHBpbmctdHJhY2tpbmciLCJlY29tbWVyY2Utc2hpcHBpbmciLCJ0cmFuc2FjdGlvbnMtcmVhZCIsInVzZXJzLXJlYWQiLCJ1c2Vycy13cml0ZSIsIndlYmhvb2tzLXJlYWQiLCJ3ZWJob29rcy13cml0ZSIsInRkZWFsZXItd2ViaG9vayJdfQ.ZpXNoQJlNevstIsKb_kk0b-u8yOPaasi5mt-4nyU3Sbl6dQ8UdQxq8QJEtfSgvzywHUD6zEuCD0I5zGaYwv2-ZMXnaT9-mk1LYnQpbFUQTOnHmc8UbDs3w84IFrr-PUDOL6rxLrcwzZXj0ZF2WIfvSIx_gN62ToYgqusH0rfMz84LX_VsuWJ0oWLoqIq5eHrZueMvWyynu5tByJw0PgTBFgo4vmrUUzIqJ3_kOTcDQrGah3YpzF3SWF8ZG65mcygww5IJEy6zGcPA8IeELKLxsl6NVWG1AZbSE3BXhiJ-4PH3TGFTbbHlxLM1te5TJEhAlUZ0KnzswHn037ZH1wZRj2rNKr4-QLOHmq6HW1Tf44Fu9hBqE7ea5Y1bwEcrjxwN79Stv1bybZXZ8rImYTNcW-Oep4nEvFz5KPOHdWxdnOPsTfvb4J71jyuWzeKbcLOk0o3wOzfJpC9LuRZWHVNSgBmrJFtNVhNLmVnBveGa43m_7cDAn6NedZicvV5u_t-xyo_h69pZCY2OuyF4Y0xhogY7Bw5yUA-qqvW1-gh88aV_abjesWHN3QwdBoiFCgsfCG4sbVxKFcHuqiUX3VsoK1zcWFwB2FCdj2aBJRKIHrjvjDoGYWMyopDykmG-S6q-Hr9hk3L0uKnQqSywfLWN5m6cdzrLBbvXzJAfwMgn-Q';
 
-            const apiKey =
-                'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImM4MzdjNDg5MmZlYWJkMTU2NjhhZjVkNDg4YjI0MzdlMmE1ZWM2YmUzYzYwNGIzYTk5ZjUxNTMxMDJjOGRlZTg4NjhmZTMyNWQ5Y2Q5ODNjIn0.eyJhdWQiOiIxIiwianRpIjoiYzgzN2M0ODkyZmVhYmQxNTY2OGFmNWQ0ODhiMjQzN2UyYTVlYzZiZTNjNjA0YjNhOTlmNTE1MzEwMmM4ZGVlODg2OGZlMzI1ZDljZDk4M2MiLCJpYXQiOjE2Nzc1OTIxMjIsIm5iZiI6MTY3NzU5MjEyMiwiZXhwIjoxNzA5MTI4MTIyLCJzdWIiOiJiMjY4OTg0Yy0yZTUzLTRiZDEtYWE2MC1mNWU0ODczZjUwODUiLCJzY29wZXMiOlsiY2FydC1yZWFkIiwiY2FydC13cml0ZSIsImNvbXBhbmllcy1yZWFkIiwiY29tcGFuaWVzLXdyaXRlIiwiY291cG9ucy1yZWFkIiwiY291cG9ucy13cml0ZSIsIm5vdGlmaWNhdGlvbnMtcmVhZCIsIm9yZGVycy1yZWFkIiwicHJvZHVjdHMtcmVhZCIsInByb2R1Y3RzLWRlc3Ryb3kiLCJwcm9kdWN0cy13cml0ZSIsInB1cmNoYXNlcy1yZWFkIiwic2hpcHBpbmctY2FsY3VsYXRlIiwic2hpcHBpbmctY2FuY2VsIiwic2hpcHBpbmctY2hlY2tvdXQiLCJzaGlwcGluZy1jb21wYW5pZXMiLCJzaGlwcGluZy1nZW5lcmF0ZSIsInNoaXBwaW5nLXByZXZpZXciLCJzaGlwcGluZy1wcmludCIsInNoaXBwaW5nLXNoYXJlIiwic2hpcHBpbmctdHJhY2tpbmciLCJlY29tbWVyY2Utc2hpcHBpbmciLCJ0cmFuc2FjdGlvbnMtcmVhZCIsInVzZXJzLXJlYWQiLCJ1c2Vycy13cml0ZSIsIndlYmhvb2tzLXJlYWQiLCJ3ZWJob29rcy13cml0ZSIsInRkZWFsZXItd2ViaG9vayJdfQ.ZpXNoQJlNevstIsKb_kk0b-u8yOPaasi5mt-4nyU3Sbl6dQ8UdQxq8QJEtfSgvzywHUD6zEuCD0I5zGaYwv2-ZMXnaT9-mk1LYnQpbFUQTOnHmc8UbDs3w84IFrr-PUDOL6rxLrcwzZXj0ZF2WIfvSIx_gN62ToYgqusH0rfMz84LX_VsuWJ0oWLoqIq5eHrZueMvWyynu5tByJw0PgTBFgo4vmrUUzIqJ3_kOTcDQrGah3YpzF3SWF8ZG65mcygww5IJEy6zGcPA8IeELKLxsl6NVWG1AZbSE3BXhiJ-4PH3TGFTbbHlxLM1te5TJEhAlUZ0KnzswHn037ZH1wZRj2rNKr4-QLOHmq6HW1Tf44Fu9hBqE7ea5Y1bwEcrjxwN79Stv1bybZXZ8rImYTNcW-Oep4nEvFz5KPOHdWxdnOPsTfvb4J71jyuWzeKbcLOk0o3wOzfJpC9LuRZWHVNSgBmrJFtNVhNLmVnBveGa43m_7cDAn6NedZicvV5u_t-xyo_h69pZCY2OuyF4Y0xhogY7Bw5yUA-qqvW1-gh88aV_abjesWHN3QwdBoiFCgsfCG4sbVxKFcHuqiUX3VsoK1zcWFwB2FCdj2aBJRKIHrjvjDoGYWMyopDykmG-S6q-Hr9hk3L0uKnQqSywfLWN5m6cdzrLBbvXzJAfwMgn-Q';
-
-            axios.get('https://melhorenvio.com.br/api/v2/me/shipment/calculate', {
-                    headers: {
-                        Authorization: `Bearer ${apiKey}`
+        axios.get('https://melhorenvio.com.br/api/v2/me/shipment/calculate', {
+                headers: {
+                    Authorization: `Bearer ${apiKey}`
+                },
+                params: {
+                    from: {
+                        postal_code: "88320-000"
                     },
-                    params: {
-                        from: {
-                            postal_code: "88320-000"
-                        },
 
-                        to: {
-                            postal_code: inputValue
-                        },
-                        products: [{
-                            width: 11,
-                            height: 17,
-                            length: 11,
-                            weight: 0.3,
-                            quantity: 1
-                        }, ]
-                    }
-                })
-                .then(response => {
-                    console.log(response.data)
-                    var b = document.createElement('b');
-                    b.innerHTML = `<span class="mtext-101 cl2">Valores do Frete : </span>`
-                    document.getElementById('container').appendChild(b);
-                    for (let i = 0; i < response.data.length; i++) {
+                    to: {
+                        postal_code: inputValue
+                    },
+
+                    products: arr.map(produto => ({
+                        width: 0.50,
+                        height: 0.70,
+                        length: 0.75,
+                        weight: 0.150,
+                        quantity: produto.quantity
+                        }))
+                }
+            })
+            .then(response => {
+                console.log(response.data)
+                var b = document.createElement('b');
+                b.innerHTML = `<span class="mtext-101 cl2">Valores do Frete : </span>`
+                document.getElementById('container').appendChild(b);
+                for (let i = 0; i < response.data.length; i++) {
+                    if (response.data[i].company.name == "Correios") {
                         if (response.data[i].error != "Serviço econômico indisponível para o trecho." &&
-                            response.data[i]
-                            .price != undefined) {
-                            let html =
-                                `<div class="d-flex">
-         <input onclick="pegarId(${response.data[i].id}, ${response.data[i].price}); marcaDesmarca(this)" id="${response.data[i].id}" type="radio"/>
-         <li class="ml-2" id="${response.data[i].id}"> ${response.data[i].name + " = " + " R$ " + response.data[i].price}</li>
-            </div>`
-                            let div = document.createElement('div');
-                            div.innerHTML = html;
-                            document.getElementById('container').appendChild(div);
-                        }
+                        response.data[i]
+                        .price != undefined) {
+                        let html =
+                            `<div class="d-flex">
+     <input onclick="pegarId(${response.data[i].id}, ${response.data[i].price}); marcaDesmarca(this)" id="${response.data[i].id}" type="checkbox"/>
+     <li class="ml-2" id="${response.data[i].id}"> ${response.data[i].name + " = " + " R$ " + response.data[i].price}</li>
+        </div>`
+                        let div = document.createElement('div');
+                        div.innerHTML = html;
+                        document.getElementById('container').appendChild(div);
                     }
-                    let valor = document.cookie.replace(/(?:(?:^|.*;\s*)fretevlr\s*\=\s*([^;]*).*$)|^.*$/,
-                    "$1");
-                    let id = document.cookie.replace(/(?:(?:^|.*;\s*)freteId\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-
-                    if (valor != "") {
-                        document.getElementById("vlrdefault").style.display = "none";
-
-                        let p = document.createElement('p');
-                        p.innerHTML = `R$ ${valor}`
-                        document.getElementById('vlrfrete').appendChild(p);
-
-
-                        document.getElementById("vlrTotaldefault").style.display = "none";
-                        let subtotal = $("#subtotal").val()
-                        let soma = somar(subtotal, valor)
-                        let p2 = document.createElement('p');
-                        p2.innerHTML = `R$ ${soma}`
-                        document.getElementById('vlrTotal').appendChild(p2);
-
-
                     }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+                    
+                }
+                let valor = document.cookie.replace(/(?:(?:^|.*;\s*)fretevlr\s*\=\s*([^;]*).*$)|^.*$/,
+                "$1");
+                let id = document.cookie.replace(/(?:(?:^|.*;\s*)freteId\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 
-            //
+                if (valor != "") {
+                    document.getElementById("vlrdefault").style.display = "none";
+
+                    let p = document.createElement('p');
+                    p.innerHTML = `R$ ${valor}`
+                    document.getElementById('vlrfrete').appendChild(p);
+
+
+                    document.getElementById("vlrTotaldefault").style.display = "none";
+                    let subtotal = $("#subtotal").val()
+                    console.log('valor', valor)
+                    console.log('subtotal', valor)
+                    let soma = somar(subtotal, valor)
+                    let resultadoFinal = soma.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                    console.log(resultadoFinal)
+                    let p2 = document.createElement('p');
+                    p2.innerHTML = `${resultadoFinal}`
+                    document.getElementById('vlrTotal').appendChild(p2);
 
 
 
-        });
-    </script>
+                    
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
 
-    <script>
-        function marcaDesmarca(caller) {
-            var checks = document.querySelectorAll('input[type="radio"]');
-            for (let i = 0; i < checks.length; i++) {
-                checks[i].checked = checks[i] == caller;
-            }
+        //
+
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        limparCookie(fretevlr)
+
+   });
+</script>
+ <script>
+    function marcaDesmarca(caller) {
+        var checks = document.querySelectorAll('input[type="checkbox"]');
+        for (let i = 0; i < checks.length; i++) {
+            checks[i].checked = checks[i] == caller;
         }
+    }
 
-        function somar(subtotal, valor) {
-            return parseFloat(subtotal) + parseFloat(valor);
-        }
+    function somar(subtotal, valor) {
+        return parseFloat(subtotal) + parseFloat(valor);
+    }
 
-        function pegarId(id, preco) {
+    function pegarId(id, preco) {
 
-            const minhaDiv = document.getElementById("vlrfrete");
-            const segundoParagrafo = minhaDiv.children[1];
-            if (segundoParagrafo != null || segundoParagrafo != undefined)
-                segundoParagrafo.remove();
+        const minhaDiv = document.getElementById("vlrfrete");
+        const segundoParagrafo = minhaDiv.children[1];
+        if (segundoParagrafo != null || segundoParagrafo != undefined)
+            segundoParagrafo.remove();
 
-            document.getElementById("vlrdefault").style.display = "none";
-            //document.getElementById("btnNotFrete").style.display = "none";
-            // localStorage.setItem('preco', preco);
-            // localStorage.setItem('id', id);
+        document.getElementById("vlrdefault").style.display = "none";
+        //document.getElementById("btnNotFrete").style.display = "none";
+        // localStorage.setItem('preco', preco);
+        // localStorage.setItem('id', id);
 
-            // Define a variável que deseja armazenar nos cookies
-            let fretevlr = preco;
-            let freteId = id;
-
-
-            // Define a data de expiração do cookie (opcional)
-            let dataExpiracao = new Date();
-            dataExpiracao.setTime(dataExpiracao.getTime() + (10 * 60 * 1000)); // expira em 10 minutos
-
-            // Armazena a variável nos cookies
-            document.cookie = "fretevlr=" + fretevlr + "; expires=" + dataExpiracao.toUTCString() + "; path=/";
-            document.cookie = "freteId=" + freteId + "; expires=" + dataExpiracao.toUTCString() + "; path=/";
+        // Define a variável que deseja armazenar nos cookies
+        let fretevlr = preco;
+        let freteId = id;
 
 
+        // Define a data de expiração do cookie (opcional)
+        let dataExpiracao = new Date();
+        dataExpiracao.setTime(dataExpiracao.getTime() + (10 * 60 * 10000)); // expira em 10 minutos
 
-            // var valor = localStorage.getItem('preco')
-            let p = document.createElement('p');
-            let valor = document.cookie.replace(/(?:(?:^|.*;\s*)fretevlr\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-
-            p.innerHTML = `R$ ${valor}`
-            document.getElementById('vlrfrete').appendChild(p);
+        // Armazena a variável nos cookies
+        document.cookie = "fretevlr=" + fretevlr + "; expires=" + dataExpiracao.toUTCString() + "; path=/";
+        document.cookie = "freteId=" + freteId + "; expires=" + dataExpiracao.toUTCString() + "; path=/";
 
 
-            let subtotal = $("#subtotal").val()
-            let soma = somar(subtotal, valor)
-            const vlrZero = document.getElementById('vlrTotal')
-            vlrZero.innerHTML = ""
-            let p2 = document.createElement('p')
-            p2.classList.add("destaque");
 
-            p2.innerHTML = `R$ ${soma}`
-            document.getElementById('vlrTotal').appendChild(p2);
+        // var valor = localStorage.getItem('preco')
+        let p = document.createElement('p');
+        let valor = document.cookie.replace(/(?:(?:^|.*;\s*)fretevlr\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 
-        }
-        function limparCookie(nomeVariavel) {
-            var dataExpiracao = new Date(); // Cria um objeto data com a data atual
-            dataExpiracao.setFullYear(dataExpiracao.getFullYear() - 1); // Define a data de expiração como um ano atrás
+        p.innerHTML = `R$ ${valor}`
+        document.getElementById('vlrfrete').appendChild(p);
 
-            document.cookie = nomeVariavel + "=;expires=" + dataExpiracao.toUTCString() + ";path=/"; // Define o valor do cookie como uma string vazia e a mesma data de expiração do cookie original
-        }
 
-    </script>
+        let subtotal = $("#subtotal").val()
+        let soma = somar(subtotal, valor)
+        const vlrZero = document.getElementById('vlrTotal')
+        vlrZero.innerHTML = ""
+        let p2 = document.createElement('p')
+        p2.classList.add("destaque");
 
+        p2.innerHTML = `R$ ${soma}`
+        document.getElementById('vlrTotal').appendChild(p2);
+
+    }
+    function limparCookie(nome) {
+        document.cookie = nome + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
+
+
+</script>
+
+   
 
 @endsection
 @component('components.topWhite', ['carrinho' => $carrinho])
@@ -466,229 +476,24 @@
 
 
 
-            <div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
-                <div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
-                    <h4 class="mtext-109 cl2 p-b-30">
-                        Resumo da compra
-                    </h4>
-                    @if ($cep != null)
-                        <input type="hidden" id="myInput" value="{{ $cep->cep }}">
-                    @else
-                        <input type="hidden" id="myInput" value="00000-000">
-                    @endif
-                    @php $subtotal = 0; @endphp
-                    <ul class="header-cart-wrapitem w-full">
-                        @foreach ($carrinho as $indice => $cart)
-                            <input type="hidden" value="{{ $cart->price }}" />
-                            <input type="hidden" value="{{ $cart->quantity }}" />
-                            @php $subtotal += $cart->price * $cart->quantity ; @endphp
-                            <input type="hidden" id="subtotal" value="{{ $subtotal }}" />
-                        @endforeach
-                        @if (count($carrinho) == 1)
-                            @foreach ($carrinho as $indice => $cart)
-                                <li class="header-cart-item flex-w flex-t m-b-12">
-                                    <div class="header-cart-item-img">
-                                        <img src="{{ asset($cart->attributes->foto) }}" alt="IMG">
-                                    </div>
-
-                                    <div class="header-cart-item-txt p-t-8">
-                                        <a href="{{ route('details', [$cart->id]) }}"
-                                            class="header-cart-item-name m-b-18 hov-cl1 trans-04">
-                                            {{ $cart->name }}
-                                        </a>
-                                        <div class="d-flex">
-                                            <span class="header-cart-item-info">
-                                                {{ $cart->quantity }} x R${{ $cart->price }}
-                                            </span>
-                                        </div>
-
-                                    </div>
-                                </li>
-                                @php $subtotal += $cart->valor ; @endphp
-                            @endforeach
-                        @else
-                            <div class="flex-w flex-t p-t-27 p-b-33 bor12">
-                                <div class="size-208">
-                                    <span class="mtext-101 cl2">
-                                        Produtos ({{ count($carrinho) }}):
-                                    </span>
-                                </div>
-
-                                <div class="size-209 p-t-1">
-                                    <span class="mtext-110 cl2">
-                                        R$ {{ $subtotal }}
-                                    </span>
-                                </div>
-                            </div>
-                        @endif
-
-                    </ul>
-
-
-                    <div class="flex-w flex-t p-t-27 p-b-33 bor12">
-                        <div class="container" id="container" style="padding-left: 0;">
-
-                        </div>
-                        <div class="size-208" style="margin-top: 5%">
-                            <span class="mtext-101 cl2">
-                                Frete:
-                            </span>
-                        </div>
-
-                        <div class="size-209 p-t-1" style="margin-top: 5%">
-                            <span class="mtext-110 cl2" id="vlrfrete">
-                                <p id="vlrdefault">R$ 0</p>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="flex-w flex-t p-t-27 p-b-33">
-                        <div class="size-208">
-                            <span class="mtext-101 cl2">
-                                Total:
-                            </span>
-                        </div>
-
-                        <div class="size-209 p-t-1">
-                            <span class="mtext-110 cl2" id="vlrTotal">
-                                <p id="vlrTotaldefault">R$ {{ $subtotal }}</p>
-
-                            </span>
-                        </div>
-                    </div>
-
-
-                    @if ($endereco == null)
-                        <a class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer js-addadress"
-                            style="color: #fff">
-                            Ir para o pagamento
-                        </a>
-                    @elseif(count($carrinho) == 0)
-                        <a class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer js-addproduct"
-                            style="color: #fff">
-                            Ir para o pagamento
-                        </a>
-                    @else
-                        <div id="irPagmento"></div>
-
-                        <script>
-                            $(document).ready(() => {
-                                let valor = document.cookie.replace(/(?:(?:^|.*;\s*)fretevlr\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-
-                                function criarBotao(valor) {
-                                    if (valor == null || valor == "") {
-                                        let html = `
-        <a class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer js-addproduct"
-        style="color: #fff" onclick="addFrete()">
-        Ir para o pagamento
-        </a>
-      `
-                                        let div = document.createElement('a');
-                                        div.innerHTML = html;
-                                        document.getElementById('irPagmento').appendChild(div);
-                                    } else {
-                                        let html = `
-        <form method="GET">
-          <button type="submit" value="Pagar" name="pagar"
-          class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-          Ir para o pagamento
-          </button>
-        </form>
-      `
-                                        let div = document.createElement('form');
-                                        div.innerHTML = html;
-                                        document.getElementById('irPagmento').appendChild(div);
-                                    }
-                                }
-
-                                criarBotao(valor); // criar botão ao carregar a página
-
-                                setInterval(() => {
-                                    let novoValor = document.cookie.replace(/(?:(?:^|.*;\s*)fretevlr\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-                                    if (novoValor !== valor) { // verifica se a variável valor foi atualizada
-                                        valor = novoValor; // atualiza a variável valor
-                                        $('#irPagmento').empty(); // remove o botão antigo
-                                        criarBotao(valor); // cria o novo botão
-                                    }
-                                }, 1000); // verifica a cada 3 segundos (você pode ajustar o tempo de acordo com suas necessidades)
-                            })
-
-                        </script>
-
-                        <?php
-                                include_once("../PagSeguroLibrary/PagSeguroLibrary.php");
-
-                            if (PagSeguroConfig::getEnvironment() == "sandbox") : ?>
-                        <!--Para integração em ambiente de testes no Sandbox use este link-->
-                        <script type="text/javascript"
-                            src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js"></script>
-                        <?php else : ?>
-                        <!--Para integração em ambiente de produção use este link-->
-                        <script type="text/javascript" src="https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js">
-                        </script>
-                        <?php endif; ?>
-                        <?php
-
-                        if (isset($_GET['pagar'])) {
-                            //https://m.pagseguro.uol.com.br/v3/guia-de-integracao/tutorial-da-biblioteca-pagseguro-em-php.html?_rnt=dd#configuracao
-                            //https://sandbox.pagseguro.uol.com.br/
-
-                            $paymentRequest = new PagSeguroPaymentRequest();
-                            foreach ($carrinho as $e) {
-                                $paymentRequest->addItem($e->attributes->produtoId, $e->name, intval($e->quantity),
-                                    floatval($e->price)
-                                );
-                            }
-
-                            $vlrFrete = $_COOKIE['fretevlr'];
-                            $paymentRequest->addItem('0000', 'Frete', 1, floatval($vlrFrete));
-                            $sedexCode = PagSeguroShippingType::getCodeByType('SEDEX');
-                            $paymentRequest->setShippingType($sedexCode);
-                            foreach ($endereco as $e) {
-                                $paymentRequest->setShippingAddress($e->cep, $e->logradouro, $e->numero, $e->complemento, $e->bairro, $e->cidade, $e->estado, 'BRA');
-                            }
-                            $nome = Auth::user()->name;
-                            $email = Auth::user()->email;
-                            $paymentRequest->setSender($nome, $email);
-
-                            $paymentRequest->setCurrency('BRL');
-
-                            // Referenciando a transação do PagSeguro em seu sistema
-                            $paymentRequest->setReference(uniqid());
-
-                            // URL para onde o comprador será redirecionado (GET) após o fluxo de pagamento
-                            $paymentRequest->setRedirectURL('https://zebrinha.gjdesenvolvimento.com.br');
-
-                            // URL para onde serão enviadas notificações (POST) indicando alterações no status da transação
-                            $paymentRequest->addParameter('notificationURL', 'https://zebrinha.gjdesenvolvimento.com.br/checkout/pagamento');
-
-                            $paymentRequest->addParameter('usuario_id', Auth::user()->id);
-
-                            try {
-                                $onlyCheckoutCode = true;
-                                $credentials = PagSeguroConfig::getAccountCredentials(); // getApplicationCredentials()
-                                $checkoutUrl = $paymentRequest->register($credentials, $onlyCheckoutCode);
-
-                                echo "<script>PagSeguroLightbox('" . $checkoutUrl . "', {
-                                        success: function(transactionCode) {
-                                            window.location.href = window.location.origin;
-                                            " . \Cart::clear() . "
-                                            limparCookie('freteId');
-                                            limparCookie('fretevlr');
-                                        }
-                                    });</script>";
-                            } catch (PagSeguroServiceException $e) {
-                                die($e->getMessage());
-                            }
-                        }
-
-                        ?>
-
-                    @endif
-
-
-
+            @component('CheckOut.resumo', ['produtos_json'=> $produtos_json, 'cep' => $cep, 'carrinho'=> $carrinho, 'endereco' => $endereco])
+            <div class="flex-w flex-t p-t-27 p-b-33 bor12">
+                <div class="container" id="container" style="padding-left: 0;">
+    
+                </div>
+                <div class="size-208" style="margin-top: 5%">
+                    <span class="mtext-101 cl2">
+                        Frete:
+                    </span>
+                </div>
+    
+                <div class="size-209 p-t-1" style="margin-top: 5%">
+                    <span class="mtext-110 cl2" id="vlrfrete">
+                        <p id="vlrdefault">R$ 0</p>
+                    </span>
                 </div>
             </div>
+            @endcomponent
         </div>
     </div>
 

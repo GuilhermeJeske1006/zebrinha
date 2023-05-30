@@ -13,11 +13,14 @@ class ProfileController extends Controller
         $carrinho = \Cart::getContent();
         $idUsuario = Auth::user()->id;
         $usuario = User::findOrfail($idUsuario);
+        $title = "Perfil";
+
 
 
         return view('profile.perfil', [
             'carrinho' => $carrinho,
-            'usuario' => $usuario
+            'usuario' => $usuario,
+            'title' => $title
         ]);
     }
     public function editPerfil(Request $request){

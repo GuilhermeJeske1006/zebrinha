@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Home</title>
+    @if(Route::currentRouteName() != 'profile.show')
+    <title>{{$title}} - Zebrinha Kids</title>
+    @endif
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="apple-touch-icon" sizes="180x180" href="{{asset('images/icons/apple-touch-icon.png')}}">
@@ -11,6 +13,8 @@
     <link rel="mask-icon" href="{{asset('images/icons/safari-pinned-tab.svg')}}" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="Encontre as melhores roupas, calçados e acessórios infantis na Zebrinha Kids">
+    <meta name="keywords" content="roupas infantis,moda infantil,calçados infantis,acessórios infantis,menino,meninas,bebês,crianças,estilo infantil,qualidade,durabilidade,conforto,conveniência,compra online,atendimento ao cliente,entrega rápida,pagamento flexível,variedade de estilos,tendências infantis,vestuário infantil,moda de qualidade para crianças.">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!--===============================================================================================--><!--===============================================================================================-->
@@ -55,6 +59,7 @@
 
 
 <!-- Back to top -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <!--===============================================================================================-->
 <script src="{{asset('vendor/jquery/jquery-3.2.1.min.js')}}"></script>
@@ -128,11 +133,10 @@
     }
 </script>
 @if ($message = Session::get('success'))
-    <<script type="text/javascript">
+    <script type="text/javascript">
         toastr.success("{{ $message }}");
     </script>
 
-    </script>
 @endif
 
 

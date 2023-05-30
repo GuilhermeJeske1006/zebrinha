@@ -18,11 +18,13 @@ return new class extends Migration
             $table->string('tamanho');
             $table->integer('qtdTamanho');
             $table->integer('produto_id')->unsigned();
+            $table->integer('cor_id')->unsigned();
             $table->timestamps();
 
             $table->foreign("produto_id")
                 ->references("id")->on("produtos")
                 ->onDelete("cascade");
+
         });
     }
 

@@ -1,9 +1,8 @@
 <section class="section-slide">
     <div class="wrap-slick1">
         <div class="slick1">
-            <div class="item-slick1 section-intro" style="background-image: url(images/banner.jpeg);     width: 100%;
-    background-position: center;
-    background-size: contain;">
+            <div class="item-slick1 section-intro" style="background-image: url(images/banner.png);     width: 100%;
+    background-position: center;">
                 <div class="container h-full">
                     <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
                         <div class="layer-slick1 animated visible-false" data-appear="fadeInDown" data-delay="0">

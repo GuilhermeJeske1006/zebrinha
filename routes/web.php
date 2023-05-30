@@ -7,6 +7,7 @@ use App\Http\Controllers\AdressController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\PagSeguroController;
 
 
 
@@ -38,6 +39,9 @@ Route::get('/endereco', [AdressController::class, 'Endereco'])->name('endereco')
 Route::post('/enviar-email', [EmailController::class, 'enviar'])->name('enviar_email');
 Route::post('/enviar-newsletter', [ProfileController::class, 'enviarNewsletter'])->name('enviar_newsletter');
 Route::match(['get', 'post'],'/checkout/pagamento', [ShopController::class, 'getPagamento'])->name('getPagamento');
+Route::get('/tamanhos-para-cor/{cor}/{produto_id}', [ShopController::class, 'tamanhosParaCor']);
+Route::get('/pagamento/pix', [ShopController::class, 'pagamentoPix'])->name('pagamentoPix');
+Route::match(['get', 'post'],'/pagamento/boleto', [ShopController::class, 'pagamentoBoleto'])->name('pagamentoBoleto');
 
 
 
@@ -54,6 +58,11 @@ Route::middleware([
     Route::post('/finalizar/pedido', [ShopController::class, 'finalizarPedido'])->name('finalizar_pedido');
     Route::put('/endereco/edit', [AdressController::class, 'edit'])->name('endereco.edit');
     Route::match(['get', 'post'],'/enviar/endereco', [AdressController::class, 'adicionarEndereco'])->name('adicionar_endereco');
+    Route::get('/checkout/pagar', [ShopController::class, 'pagamento'])->name('pagamento');
+    Route::post('/pagseguro/payment', [PagSeguroController::class, 'makePayment'])->name('makePayment');
+    Route::get('/checkout/pix', [PagSeguroController::class, 'pix'])->name('pix');
+    Route::match(['get', 'post'],'/checkout/boleto', [PagSeguroController::class, 'boleto'])->name('boleto');
+    // Route::post('/checkout/pagar', [PagSeguroController::class, 'getKey'])->name('getKey');
 
 
 });

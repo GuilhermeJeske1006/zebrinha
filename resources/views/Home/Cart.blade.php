@@ -20,16 +20,23 @@
 
                 <li class="header-cart-item flex-w flex-t m-b-12">
                     <div class="header-cart-item-img">
-                        <img src="{{asset($cart->attributes->foto)}}" alt="IMG">
+                       
+                        <img src="{{$admin_url . '/' . str_replace('public/', 'storage/', $cart->attributes->foto) }}" alt="IMG">
+
                     </div>
 
                     <div class="header-cart-item-txt p-t-8">
                         <a href="{{route('details',  [$cart->attributes->produtoId])}}" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
-                            {{$cart->name}}
+                            {{$cart->name}} 
                         </a>
+                        <div>
+                            <span class="header-cart-item-info">
+								 <b>{{$cart->attributes->cor}} </b>
+							</span>
+                        </div>
                         <div class="d-flex">
                             <span class="header-cart-item-info">
-								{{$cart->quantity}} x R${{$cart->price}}
+								{{$cart->quantity}} x R$ {{$cart->price}}
 							</span>
                             <span class="header-cart-item-info" style="margin-left: 3%">- {{$cart->attributes->tamanho}}</span>
                             <form action="{{route('excluir_carrinho')}}" method="POST" style="margin-left: 50%;">

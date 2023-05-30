@@ -4,52 +4,66 @@
     use Darryldecode\Cart\Cart;
 
         include_once("../PagSeguroLibrary/PagSeguroLibrary.php");
-            $notificationCode = $_POST['notificationCode'];
-            //$notificationCode = 'F950D28E10911091E58BB47DBF9A877203E8';
-            try {
+            $notificationCode = $_POST['code'];
+            $url = "https://ws.pagseguro.uol.com.br/v3/transactions/notifications/${notificationCode}?email=guilhermeieski@gmail.com&token=b6a96588-9307-4e89-8f77-8396919b1172e372748a456d94b3c65b6ec60f8dace92b6e-b93f-47fb-835e-52f3392b639e";
 
-
-                $credentials = PagSeguroConfig::getAccountCredentials(); // getApplicationCredentials()
-                $response = PagSeguroNotificationService::checkTransaction(
-                    $credentials,
-                    $notificationCode
+            $headers = array(
+                'Content-Type: application/xml'
             );
 
-                $reference = $response->getReference();
-                $status = $response->getStatus()->getTypeFromValue();
-                $usuario_id = $response->getParameter('usuario_id');
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-                //WAITING_PAYMENT-PAID-AVAILABLE-IN_DISPUTE-CANCELLED-REFUNDED
-                switch($status){
-                    case "WAITING_PAYMENT":
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            // Verificar se a solicitação foi bem-sucedida
+            if ($response === false) {
+                echo 'Erro na solicitação';
+            } else {
+                // Trabalhar com o XML retornado
+                $xml = simplexml_load_string($response);
+
+                // Acessar os elementos do XML
+                $date = $xml->date;
+                $code = $xml->code;
+                $type = $xml->type;
+                $status = $xml->status;
+                $reference = (string) $xml->reference;
+                // ... acessar outros elementos conforme necessário
+
+                // Exibir os valores
+                echo "Data: " . $date . "<br>";
+                echo "Código: " . $code . "<br>";
+                echo "Tipo: " . $type . "<br>";
+                echo "Status: " . $status . "<br>";
 
 
-                        $pedido_id = DB::table('pedidos')->insertGetId([
-                            'status' => $status,
-                            'reference' => $reference,
-                            'dataPedido' => now(),
-                            'usuario_id' => $usuario_id,
-                        ]);
+            switch($status){
+                case 1:
+                    $pedido = DB::table('pedidos')->where('reference', $reference)->first();
+                    $pedido_id = $pedido->id;
 
-                        $items = $response->getItems();
-                        foreach ($items as $item) {
-                            if ($item->getId() != 0000){
-                                DB::table('itens_pedidos')->insert([
-                                'pedido_id' => $pedido_id,
-                                'produto_id' => $item->getId(),
-                                'quantidade' => $item->getQuantity(),
-                                'valor' => $item->getAmount(),
-                                'dt_item' => now(),
-                            ]);
-                            }
-                        };
-                        echo 'WAITING_PAYMENT';
+                    DB::table('pedidos')
+                        ->where('id', $pedido_id)
+                        ->update(['status' => 'WAITING_PAYMENT']);
+
+                    break;
+                   case 2:
+                        $pedido = DB::table('pedidos')->where('reference', $reference)->first();
+                        $pedido_id = $pedido->id;
+
+                        DB::table('pedidos')
+                            ->where('id', $pedido_id)
+                            ->update(['status' => 'Em análise']);
+
+                        // Output the order ID
+                        echo 'IN_DISPUTE - Pedido ID: ' . $pedido_id;
                         break;
 
-
-                   case "PAID":
-                        $reference = $response->getReference();
-
+                case 3:
                         $pedido = DB::table('pedidos')->where('reference', $reference)->first();
                         $pedido_id = $pedido->id;
 
@@ -57,28 +71,25 @@
                             ->where('id', $pedido_id)
                             ->update(['status' => 'PAID']);
 
-
-                        echo 'PAID - Pedido ID: ' . $pedido_id;
-                        break;
-
-                    case "AVAILABLE":
-                        $reference = $response->getReference();
-
-                        $pedido = DB::table('pedidos')->where('reference', $reference)->first();
-                        $pedido_id = $pedido->id;
-
-                        DB::table('pedidos')
-                            ->where('id', $pedido_id)
-                            ->update(['status' => 'AVAILABLE']);
-
                         // Output the order ID
-                        echo 'PAID - Pedido ID: ' . $pedido_id;
+                        echo 'IN_DISPUTE - Pedido ID: ' . $pedido_id;
                         break;
+
+                case 4:
+
+                    $pedido = DB::table('pedidos')->where('reference', $reference)->first();
+                    $pedido_id = $pedido->id;
+
+                    DB::table('pedidos')
+                        ->where('id', $pedido_id)
+                        ->update(['status' => 'AVAILABLE']);
+
+                    // Output the order ID
+                    echo 'IN_DISPUTE - Pedido ID: ' . $pedido_id;
+                    break;
 
 
                     case "IN_DISPUTE":
-                         $reference = $response->getReference();
-
                         $pedido = DB::table('pedidos')->where('reference', $reference)->first();
                         $pedido_id = $pedido->id;
 
@@ -91,8 +102,6 @@
                         break;
 
                     case "CANCELLED":
-                        $reference = $response->getReference();
-
                         $pedido = DB::table('pedidos')->where('reference', $reference)->first();
                         $pedido_id = $pedido->id;
 
@@ -105,8 +114,6 @@
                         break;
 
                     case "REFUNDED":
-                        $reference = $response->getReference();
-
                         $pedido = DB::table('pedidos')->where('reference', $reference)->first();
                         $pedido_id = $pedido->id;
 
@@ -120,5 +127,5 @@
             } catch (PagSeguroServiceException $e) {
                 die($e->getMessage());
             }
-
+            //     
 @endphp
